@@ -1,0 +1,47 @@
+%h1 {
+
+}
+
+%h2 {
+	font-family: $font_1;
+	font-weight: 700;
+	font-size: 3.6rem;
+	line-height: 1.1;
+	color: $blue;
+}
+
+%h3 {
+	font-family: $font_1;
+	font-weight: 700;
+	font-size: 2.4rem;
+	line-height: 1.1;
+	color: $blue;
+}
+
+%descr {
+	font-family: $font_1;
+	font-weight: 400;
+	font-size: 1.6rem;
+	line-height: 1.4;
+	color: $subtitle_blue;
+}
+
+%label {
+	font-family: $font_2;
+	font-weight: 700;
+	font-size: 1.6rem;
+	line-height: 1.4;
+	color: $blue;
+}
+
+%button { // nav, input and button text
+	font-family: $font_1;
+	font-weight: 700;
+	font-size: 1.8rem;
+	line-height: 1.4;
+}
+
+// offsets
+%title_offset {
+	margin-bottom: 2rem;
+}

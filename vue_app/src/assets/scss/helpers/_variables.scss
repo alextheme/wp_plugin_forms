@@ -1,0 +1,63 @@
+//---------------------------------------------fonts
+$font_path: "assets/fonts/";
+$font_1: "Poppins", sans-serif;
+$font_2: "Commissioner", sans-serif;
+$font_size_base: 1.8rem;
+//---------------------------------------------fonts###
+
+//---------------------------------------------colors
+$white: #fff;
+$black: #000;
+
+$blue: #05005C; // Blue
+$lincks_blue: #005DE9; // Lincks
+$subtitle_blue: #69669D; // Subtitle
+$devider_light_blue: #C3C2D8; // Devider
+$light_blue: #F4F7FB; // Light Blue
+$red: #DB292B; // Red
+$yellow: #F1B312; // Yellow
+$green: #48B143; // Green
+
+$color_text_base: $blue;
+$color_link_base: $lincks_blue;
+$body_bg: $white;
+//---------------------------------------------colors###
+
+//---------------------------------------------z-index
+$z-index: (
+	popup: 101,
+	header: 100,
+	footer: 100,
+);
+//---------------------------------------------z-index###
+
+//---------------------------------------------layout
+$page_width: 77rem;
+
+//---------------------------------------------layout###
+
+//---------------------------------------------global values
+$gl_radius: .8rem;
+//---------------------------------------------global values###
+
+//---------------------------------------------media points
+$point_1: 1200px;
+$point_2: 1024px;
+$point_3: 1023px;
+$point_4: 768px;
+$point_5: 640px;
+$point_6: 480px;
+$point_7: 375px;
+$point_8: 320px;
+//---------------------------------------------media points
+
+//---------------------------------------------forms
+$input_height: 6rem;
+$input_offset: 0 1rem;
+$input_font_size: 1.8rem;
+$input_border_color: $devider_light_blue;
+$input_border_color_active: $lincks_blue;
+$input_placeholder_color: $devider_light_blue;
+$input_text_color: $blue;
+$input_radius: $gl_radius;
+//---------------------------------------------forms###

@@ -1,0 +1,20 @@
+{
+    "name": "olbrmsk/shppb_forms_insurance",
+    "description": "forms for insurance",
+    "autoload": {
+        "psr-4": {
+            "Olbrmsk\\ShppbFormsInsurance\\": "src/",
+            "SFI\\Includes\\": "includes/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Олександр",
+            "email": "alfrbrmsk@gmail.com"
+        }
+    ],
+    "require": {
+        "tecnickcom/tcpdf": "^6.5.5",
+        "phpmailer/phpmailer": "^6.9"
+    }
+}

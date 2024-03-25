@@ -1,0 +1,206 @@
+.formkit-outer[data-type="radio"]  {
+
+  .formkit-wrapper[data-checked="true"] {
+    background-color: $lincks_blue;
+    color: $white;
+
+    .formkit-label {
+      color: $white;
+    }
+
+    &:before {
+      outline-width: .4rem;
+      outline-color: $white;
+      outline-offset: -.4rem;
+    }
+  }
+
+  // label
+  .formkit-wrapper {
+    @extend %global_flex_block_row_wrap_center_center;
+
+    @extend %transition_color_background;
+
+    position: relative;
+
+    display: block;
+    width: 100%;
+    height: 6rem;
+    padding: 0 2.4rem 0 6.4rem;
+
+    line-height: 6rem;
+    white-space: nowrap;
+
+    color: $blue;
+    background-color: $light_blue;
+    border-radius: $gl_radius;
+    cursor: pointer;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 2.7rem;
+
+      width: 1.8rem;
+      height: 1.8rem;
+
+      border-radius: 100%;
+      outline: .2rem solid $devider_light_blue;
+      outline-offset: -.2rem;
+      background-color: transparent;
+    }
+  }
+
+  .formkit-inner {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .formkit-decorator {
+    display: none;
+  }
+
+  .formkit-label {
+    @extend %button;
+    width: fit-content;
+    line-height: 6rem;
+  }
+
+
+
+
+  // Star Mod
+  .q_item--star_mod & {
+    .formkit-options {
+      @extend %global_flex_block_row_wrap_center_center;
+    }
+
+    .formkit-option {
+      width: 50%;
+      cursor: pointer;
+    }
+
+    .formkit-wrapper {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 1.6rem;
+
+      &:before {
+        top: 1.8rem;
+        left: 1.8rem;
+        transform: translateY(0);
+      }
+
+      .label__in {
+        .title {
+          @extend %button;
+
+          display: block;
+          margin-bottom: 1.2rem;
+
+          color: inherit;
+          text-align: center;
+        }
+
+        .stars {
+          @extend %global_flex_block_row_nowrap_center_center;
+
+          margin-bottom: 1.2rem;
+
+          .icon_wrapper {
+            display: block;
+            width: 2.4rem;
+            height: 2.4rem;
+
+            color: $yellow;
+          }
+        }
+
+        .footer_text {
+          @extend %global_flex_block_column_nowrap_center_center;
+
+          color: inherit;
+
+          .text {
+            @extend %descr;
+
+            text-align: center;
+            color: inherit;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+// CHECKBOX
+
+.formkit-outer[data-type="checkbox"] {
+
+  input[type='checkbox'] {
+    width: .1px;
+    height: .1px;
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .formkit-option {
+    &:not(:last-child) {
+      margin-bottom: 1.2rem;
+    }
+  }
+
+  .formkit-fieldset {
+    border: none;
+    padding: 0;
+  }
+
+  .formkit-wrapper {
+    @extend %global_flex_block_row_nowrap_flex_start_center;
+
+    cursor: pointer;
+
+    .formkit-decorator {
+      display: block;
+      width: 1.6rem;
+      height: 1.6rem;
+      margin-right: 1.2rem;
+      margin-top: -1px;
+
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='1' width='14' height='14' rx='7' stroke='%23C3C2D8' stroke-width='2'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 100% 100%;
+
+      .formkit-decorator-icon {
+        &.formkit-icon { display: none!important }
+        svg { display: none!important }
+      }
+    }
+
+    &[data-checked="true"] .formkit-decorator {
+      background-image: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="16" height="16" rx="8" fill="%2348B143"/><path d="M11.3327 5.5L6.74935 10.0833L4.66602 8" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    }
+  }
+
+  .formkit-label {
+    @extend %descr;
+
+    margin-bottom: 0;
+    color: $blue;
+  }
+
+}

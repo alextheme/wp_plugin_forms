@@ -1,0 +1,67 @@
+[data-input="text"] {
+  .formkit-wrapper {
+
+  }
+}
+
+.formkit-label {
+  @extend %button;
+
+  display: block;
+
+  margin-bottom: 1rem;
+  padding: 0;
+
+  font-size: 1.6rem;
+  color: $blue;
+}
+
+.formkit-inner {
+  box-shadow: none;
+  border-radius: .8rem;
+  &:focus {
+    display: none;
+    border-radius: .8rem;
+  }
+}
+
+.formkit-input {
+  @extend %transition_color;
+  @extend %button;
+
+  height: 6rem;
+  width: 100%;
+  line-height: 6rem;
+  padding: 0 3rem !important;
+
+  border-radius: $gl_radius !important;
+  border: 2px solid $devider_light_blue !important;
+
+  &:hover,
+  &:focus {
+    border: 2px solid $lincks_blue;
+  }
+
+  @include bp($point_5) {
+    padding: 0 2rem;
+  }
+}
+
+
+// Date MOD
+.questions__item--date_mod {
+
+  .questions__item_in {
+    @extend %global_flex_block_row_nowrap_center_center;
+
+    margin: 0 -1.2rem -1.2rem 0;
+
+    .formkit-outer {
+      padding: 0 1.2rem 1.2rem 0;
+      margin: 0;
+    }
+  }
+}
+
+
+

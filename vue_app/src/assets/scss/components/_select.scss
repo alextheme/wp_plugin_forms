@@ -1,0 +1,131 @@
+.custom-select {
+  @extend %button;
+
+  position: relative;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  height: 6rem;
+  line-height: 5.6rem;
+}
+
+.custom-select .selected {
+  height: 100%;
+  padding: 0 1.6rem;
+
+  color: $blue;
+  background-color: $white;
+  border-radius: $gl_radius;
+  border: 2px solid $devider_light_blue;
+  cursor: pointer;
+  user-select: none;
+
+  transition: border-color .3s ease;
+  will-change: border-color;
+
+  &:hover {
+    border-color: $lincks_blue;
+  }
+}
+
+.custom-select .selected.selectOpen {
+  border: 2px solid $lincks_blue;
+  border-radius: $gl_radius $gl_radius 0 0;
+}
+
+.custom-select .icon_wrapper {
+  position: absolute;
+  top: 50%;
+  right: 1.6rem;
+  transform: translateY(-50%);
+
+  width: 1.4rem;
+  height: .8rem;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.custom-select .selected.selectOpen + .icon_wrapper {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.custom-select .items {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+
+  max-height: 27.4rem;
+  margin-left: 0;
+
+  color: $blue;
+  background-color: $white;
+  border-radius: 0 0 $gl_radius $gl_radius;
+  border-right: .2rem solid $lincks_blue;
+  border-left: .2rem solid $lincks_blue;
+  border-bottom: .2rem solid $lincks_blue;
+
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.custom-select .items .selected_value {
+  color: $white;
+  background-color: $lincks_blue;
+}
+
+.custom-select .items .item {
+  height: 4.5rem;
+  line-height: 4.5rem;
+  padding: 0 1.6rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-select .items .item:not(.selected_value):hover {
+  background-color: $light_blue;
+}
+
+.selectHide {
+  display: none;
+}
+
+
+// Loader
+
+.custom-select.load .loader {
+  display: block;
+}
+
+.custom-select.load .items {
+  display: none;
+}
+
+/* HTML: <div class="loader"></div> */
+.custom-select .loader {
+  display: none;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  --d:17px;
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  color: $blue;
+  opacity: .6;
+  box-shadow:
+          calc(1*var(--d))      calc(0*var(--d))     0 0,
+          calc(0.707*var(--d))  calc(0.707*var(--d)) 0 1px,
+          calc(0*var(--d))      calc(1*var(--d))     0 2px,
+          calc(-0.707*var(--d)) calc(0.707*var(--d)) 0 3px,
+          calc(-1*var(--d))     calc(0*var(--d))     0 4px,
+          calc(-0.707*var(--d)) calc(-0.707*var(--d))0 5px,
+          calc(0*var(--d))      calc(-1*var(--d))    0 6px;
+  animation: l27 1s infinite steps(8);
+}
+@keyframes l27 {
+  100% {transform: rotate(1turn)}
+}

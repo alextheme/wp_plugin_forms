@@ -1,0 +1,13 @@
+.shppb-general-form {
+
+}
+
+.shppb-general-form .form-table input,
+.shppb-general-form .form-table textarea {
+    min-width: 80%;
+    max-width: 98%;
+}
+
+.shppb-general-form .form-table textarea {
+    min-height: 200px;
+}
