@@ -220,7 +220,7 @@
                                 v-model="field.value"
                                 type="checkbox"
                                 :options="field.options"
-                                @input="scrollController(i)"
+                                @input="validateCheckbox(i)"
                             />
                         </li>
 
@@ -284,47 +284,42 @@
                         <li v-if="field.type === 'user_name' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--user_name_mod', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
-                            <FormKit
-                                id="FkUserName"
-                                name="user_name"
-                                type="group"
-                                v-model="field.value"
-                            >
+                            <div class="formkit-outer">
+                                <div class="formkit-wrapper">
+                                    <label class="formkit-label" for="input_full_name">Full Name</label>
+                                    <div class="formkit-inner">
+                                        <input
+                                           placeholder="Full Name"
+                                           class="formkit-input"
+                                           type="text"
+                                           name="full_name"
+                                           id="input_full_name"
+                                           v-model="field.value.full_name"
+                                           @input="validateUserName(i)"
+                                           @animationstart="checkAutofill"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
 
-                                <template #default="{ state: { valid } }">
+                            <div class="formkit-outer">
+                                <div class="formkit-wrapper">
+                                    <label class="formkit-label" for="input_last_name">Last Name</label>
+                                    <div class="formkit-inner">
+                                        <input
+                                           placeholder="Last Name"
+                                           class="formkit-input"
+                                           type="text"
+                                           name="last_name"
+                                           id="input_last_name"
+                                           v-model="field.value.last_name"
+                                           @input="validateUserName(i)"
+                                           @animationstart="checkAutofill"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
 
-                                    <FormKit
-                                        type="text"
-                                        label="Full Name"
-                                        number
-                                        name="full_name"
-                                        help=""
-                                        placeholder="Full Name"
-                                        :validation="field.validation.full_name"
-
-                                        :user_name_valid="userNameValid = valid"
-                                        @input="validateUserName(field, valid, 'full_name', i)"
-                                        @animationstart="checkAnimation"
-                                        validation-visibility="live"
-                                    />
-
-                                    <FormKit
-                                        type="text"
-                                        label="Last Name"
-                                        number
-                                        name="last_name"
-                                        help=""
-                                        placeholder="Last Name"
-                                        :validation="field.validation.last_name"
-
-                                        :user_name_valid="userNameValid = valid"
-                                        @input="validateUserName(field, valid, 'last_name', i)"
-                                        @animationstart="checkAnimation"
-                                        validation-visibility="live"
-                                    />
-                                </template>
-
-                            </FormKit>
                         </li>
 
                         <li v-if="field.type === 'address' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--address_mod', {show: field.show, complete: field.complete} ]">
@@ -333,55 +328,49 @@
                             <div class="q_item_in">
 
                                 <FormKit name="user_name" type="group">
-                                    <template #default="{ value, state: { valid } }">
-                                        <FormKit
-                                            v-model="field.value.address"
-                                            name="address"
-                                            label="Address"
-                                            type="text"
-                                            :validation="field.validation.address"
-                                            @input="validateAddress(field, 'address', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
-                                        />
-                                        <FormKit
-                                            v-model="field.value.unit"
-                                            name="unit"
-                                            label="Unit #"
-                                            type="text"
-                                            :validation="field.validation.unit"
-                                            @input="validateAddress(field, 'unit', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
-                                        />
-                                        <FormKit
-                                            v-model="field.value.apt"
-                                            name="apt"
-                                            label="Apt or unit (optional)"
-                                            type="text"
-                                            :validation="field.validation.apt"
-                                            @input="validateAddress(field, 'apt', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
-                                        />
+                                    <FormKit
+                                        v-model="field.value.address"
+                                        name="address"
+                                        label="Address"
+                                        type="text"
+                                        @input="validateAddress('address', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
+                                    <FormKit
+                                        v-model="field.value.unit"
+                                        name="unit"
+                                        label="Unit #"
+                                        type="text"
+                                        @input="validateAddress('unit', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
+                                    <FormKit
+                                        v-model="field.value.apt"
+                                        name="apt"
+                                        label="Apt or unit (optional)"
+                                        type="text"
+                                        @input="validateAddress('apt', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
 
-                                        <div class="select_dropdown">
-                                            <label>State: </label>
-                                            <select-dropdown
-                                                name="state"
-                                                :default="field.value.state"
-                                                :options="field.options"
-                                                @input="validateAddress(field, 'state', i, $event.value, valid)"
-                                            />
-                                        </div>
-
-                                        <FormKit
-                                            v-model="field.value.zip"
-                                            label="Enter ZIP Code"
-                                            type="text"
-                                            name="zip"
-                                            :validation="field.validation.zip"
-                                            @input="validateAddress(field, 'zip', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
+                                    <div class="select_dropdown">
+                                        <label>State: </label>
+                                        <select-dropdown
+                                            name="state"
+                                            :default="field.value.state"
+                                            :options="field.options"
+                                            @input="validateAddress('state', i, $event.value)"
                                         />
-                                    </template>
+                                    </div>
+
+                                    <FormKit
+                                        v-model="field.value.zip"
+                                        label="Enter ZIP Code"
+                                        type="text"
+                                        name="zip"
+                                        @input="validateAddress('zip', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
                                 </FormKit>
 
                             </div>
@@ -393,51 +382,45 @@
                             <div class="q_item_in">
 
                                 <FormKit name="address_v2" type="group" v-model="field.value">
-                                    <template #default="{ value, state: { valid } }">
-                                        <FormKit
-                                            name="address"
-                                            label="Address"
-                                            type="text"
-                                            :validation="field.validation.address"
-                                            @input="validateAddress(field, 'address', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
-                                        />
-                                        <FormKit
-                                            name="unit"
-                                            label="Unit #"
-                                            type="text"
-                                            :validation="field.validation.unit"
-                                            @input="validateAddress(field, 'unit', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
-                                        />
-                                        <FormKit
-                                            name="city"
-                                            label="City"
-                                            type="text"
-                                            :validation="field.validation.city"
-                                            @input="validateAddress(field, 'city', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
-                                        />
+                                    <FormKit
+                                        name="address"
+                                        label="Address"
+                                        type="text"
+                                        @input="validateAddress('address', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
+                                    <FormKit
+                                        name="unit"
+                                        label="Unit #"
+                                        type="text"
+                                        @input="validateAddress('unit', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
+                                    <FormKit
+                                        name="city"
+                                        label="City"
+                                        type="text"
+                                        @input="validateAddress('city', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
 
-                                        <div class="select_dropdown">
-                                            <label>State: </label>
-                                            <select-dropdown
-                                                name="state"
-                                                :default="field.value.state"
-                                                :options="field.options"
-                                                @input="validateAddress(field, 'state', i, $event.value, valid)"
-                                            />
-                                        </div>
-
-                                        <FormKit
-                                            label="Enter ZIP Code"
-                                            type="text"
-                                            name="zip"
-                                            :validation="field.validation.zip"
-                                            @input="validateAddress(field, 'zip', i, $event.value, valid)"
-                                            @animationstart="checkAnimation"
+                                    <div class="select_dropdown">
+                                        <label>State: </label>
+                                        <select-dropdown
+                                            name="state"
+                                            :default="field.value.state"
+                                            :options="field.options"
+                                            @input="validateAddress('state', i, $event.value)"
                                         />
-                                    </template>
+                                    </div>
+
+                                    <FormKit
+                                        label="Enter ZIP Code"
+                                        type="text"
+                                        name="zip"
+                                        @input="validateAddress('zip', i, $event.value)"
+                                        @animationstart="checkAutofill"
+                                    />
                                 </FormKit>
                             </div>
                         </li>
@@ -450,7 +433,6 @@
                                 label="lbs."
                                 number
                                 name="lbs"
-                                :validation="field.validation"
                                 :delay="500"
                                 @input="scrollController(i)"
                             />
@@ -460,61 +442,68 @@
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item__in">
-                                <FormKit
-                                    name="tall"
-                                    type="group"
-                                    v-model="field.value"
-                                >
-
-                                    <template
-                                        #default="{ value, state: { valid } }"
-                                    >
-                                        <FormKit
-                                            type="number"
-                                            label="ft."
-                                            number
-                                            name="ft"
-                                            :validation="field.validation.ft"
-                                            :delay="500"
-                                            @input="scrollController(i)"
-                                        />
-
-                                        <FormKit
-                                            type="number"
-                                            label="in."
-                                            number
-                                            name="in"
-                                            :validation="field.validation.in"
-                                            :delay="500"
-                                            @input="scrollController(i)"
-                                        />
-                                    </template>
-
-                                </FormKit>
+                                <div class="formkit-outer">
+                                    <div class="formkit-wrapper">
+                                        <label class="formkit-label" for="input_size_two_ft">ft.</label>
+                                        <div class="formkit-inner">
+                                            <input class="formkit-input"
+                                                   type="number"
+                                                   name="ft"
+                                                   id="input_size_two_ft"
+                                                   v-model="field.value.ft"
+                                                   @input="validateText(i)"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="formkit-outer">
+                                    <div class="formkit-wrapper">
+                                        <label class="formkit-label" for="input_size_two_in">in.</label>
+                                        <div class="formkit-inner">
+                                            <input class="formkit-input"
+                                                   type="number"
+                                                   name="in"
+                                                   id="input_size_two_in"
+                                                   v-model="field.value.in"
+                                                   @input="validateText(i)"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </li>
 
 
                         <li v-if="['text', 'number', 'email'].includes(field.type) && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--text_one', 'q_item--field_type__'+field.type, {show: field.show, complete: field.complete} ]">
-                        <question-header :title="field.title" :descr="field.descr" />
+                            <question-header :title="field.title" :descr="field.descr" />
 
-                        <FormKit :name="'user_' + field.type" type="group">
-                            <template #default="{ state: { valid } }">
-                                <FormKit
-                                    v-model="field.value"
-                                    :type="field.type"
-                                    :name="field.name || field.title"
-                                    :validation="field.validation"
-                                    :delay="0"
-
-                                    validation-visibility="live"
-                                    @animationstart="checkAnimation"
-                                    :complete="field.complete = valid"
-                                    @input="validateText(field, i)"
-                                />
-                            </template>
-                        </FormKit>
-                    </li>
+                            <div class="formkit-outer" data-family="text" data-type="number" data-complete="true">
+                                <div class="formkit-wrapper">
+                                    <div class="formkit-inner">
+                                        <input v-if="field.type === 'number'"
+                                            class="formkit-input"
+                                            v-model="field.value"
+                                            :id="'input_' + i"
+                                            type="number"
+                                            :min="field.minValue"
+                                            :step="field.step"
+                                            :name="field.name || field.title"
+                                            @animationstart="checkAutofill"
+                                            @input="validateText(i)"
+                                        >
+                                        <input v-if="field.type !== 'number'"
+                                            class="formkit-input"
+                                            v-model="field.value"
+                                            :id="'input_' + i"
+                                            :type="field.type"
+                                            :name="field.name || field.title"
+                                            @animationstart="checkAutofill"
+                                            @input="validateText(i)"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
 
                     </template>
                 </template>
@@ -568,8 +557,6 @@ export default {
             tab: {active: 0, complete: [0, 0, 0, 0], available: [0, 0, 0, 0]},
             nav: { auto: ['Vehicles', 'Drivers', 'Final Details', 'Quotes'], home: ['Home', 'Owner', 'Final Details', 'Quotes'] },
             tabs: { auto: [13, 24, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
-            //isValidDate: {mm: false, dd: false, yyyy: false},
-            userNameValid: false,
             userNameObj: '',
             auto_make: '',
             company_name: '',
@@ -661,48 +648,56 @@ export default {
         },
 
         /** Load Data */
-        loadAutoData(event, fieldType, id) {
+        loadAutoData(event, fieldType, i) {
             const self = this
+            const question = this.questions[i]
+            const htmlElem = this.$refs['qs' + i][0]
 
             if (!event.target.classList.contains('selected')) {
-                self.scrollController(id)
+                self.scrollController(i)
             }
 
             if (fieldType === 'select_auto__year') {
 
-                const elem = document.querySelector('.q_item--select_auto.id' + id)
-                if (elem) this.scrollToSmoothly(this.getCoords(elem).top - 80)
+                if (htmlElem) this.scrollToSmoothly(this.getCoords(htmlElem).top - 80)
 
-                const year = self.questions[id].value.auto_year
+                const year = question.value.auto_year
 
                 if (!!year) {
-                    self.questions[id].load.makes = true
-                    self.questions[id].value.auto_make = ''
-                    self.questions[id].value.auto_model = ''
+                    question.load.makes = true
+                    question.value.auto_make = ''
+                    question.value.auto_model = ''
+                    const makes = htmlElem.querySelectorAll('.custom-select')[1].querySelector('.selected')
+                    const models = htmlElem.querySelectorAll('.custom-select')[2].querySelector('.selected')
+                    makes.innerHTML = question.options.makes[0]
+                    models.innerHTML = question.options.models[0]
 
                     axios.get('https://www.fueleconomy.gov/ws/rest/vehicle/menu/make?year=' + year)
                         .then(function (data) {
                             const response = data.request.response
                             const obj = JSON.parse(response)
                             const arr = obj.menuItem.map(elem => elem.value)
-                            self.questions[id].options.makes = [self.questions[id].options.makes[0], ...arr]
+                            question.options.makes = [question.options.makes[0], ...arr]
                         })
                         .catch(function (error) {
                             console.log(error.message)
                         })
                         .finally(function () {
-                            self.questions[id].load.makes = false
+                            question.load.makes = false
                         })
                 }
             }
 
-            if (fieldType === 'select_auto__makes' && !!self.questions[0].value.auto_make) {
+            if (fieldType === 'select_auto__makes' && !!question.value.auto_make) {
 
-                self.questions[0].load.models = true
+                question.load.models = true
+                question.value.auto_model = ''
+                const models = htmlElem.querySelectorAll('.custom-select')[2].querySelector('.selected')
+                models.innerHTML = question.options.models[0]
 
                 const host = 'www.fueleconomy.gov'
-                const make = self.questions[0].value.auto_make
-                const year = self.questions[0].value.auto_year
+                const make = question.value.auto_make
+                const year = question.value.auto_year
                 const url = 'https://' + host + '/ws/rest/vehicle/menu/model?year=' + year + '&make=' + make
 
                 axios.get(url)
@@ -711,13 +706,13 @@ export default {
                         const obj = JSON.parse(response)
                         const arr = obj.menuItem.map(elem => elem.value)
 
-                        self.questions[0].options.models = [ self.questions[0].options.models[0], ...arr ]
+                        question.options.models = [ question.options.models[0], ...arr ]
                     })
                     .catch(function (error) {
                         console.log(error.message)
                     })
                     .finally(function () {
-                        self.questions[0].load.models = false
+                        question.load.models = false
                     })
             }
         },
@@ -885,10 +880,8 @@ export default {
                         }
                     }
 
-                }, 1000)
+                }, 800)
             }, 300)
-
-
         },
         validateAge(month, day, year, minAge = 18) {
             if ([month, day, year].includes(undefined)) {
@@ -929,58 +922,133 @@ export default {
                 return -1
             }
         },
-        validateUserName(field, valid, key, i) {
+        validateUserName(i) {
+            const question = this.questions[i]
 
             setTimeout(() => {
+                const { full_name, last_name } = question.value
+                question.value.full_name = full_name[0] ? full_name[0].toUpperCase() + full_name.substring(1) : ''
+                question.value.last_name = last_name[0] ? last_name[0].toUpperCase() + last_name.substring(1) : ''
+
                 if (this.autofilled) {
-                    field.complete = !!field.value.full_name && !!field.value.last_name
+                    question.complete = !!full_name && !!last_name
                 } else {
-                    field.complete = this.userNameValid
-                    field.onInput = true
-                    this.userNameObj = field.value
+                    question.complete = !!full_name && !!last_name
+                    question.onInput = true
+                    this.userNameObj = question.value
                 }
             }, 300)
 
             this.scrollController(i)
         },
-        validateAddress(field, name, id, value, valid) {
+        validateAddress(name, i, value) {
             const self = this
+            const question = this.questions[i]
+            const isTypeAddress2 = question.type === 'address_v2'
 
             setTimeout(() => {
 
-                let selectedState = !!field.value.state
+                let selectedState = !!question.value.state
+
+                const { address,  unit, state, zip, city } = question.value
 
                 if (name === 'state') {
-                    field.value.state = value
+                    console.log(value)
+                    question.value.state = value
                     selectedState = !!value
                 }
 
-                if (this.autofilled) {
-                    setTimeout(() => {
-                        field.complete = !!field.value.address && !!field.value.unit && !!field.value.state && !!field.value.zip
-                    }, 0)
-                } else {
-                    field.complete = valid && selectedState
-                    field.onInput = true
+                question.complete = !!address && !!unit && !!state && !!zip && selectedState && (isTypeAddress2 ? !!city : true)
+
+                console.log(question.complete, address,  unit, state, zip, city)
+
+                if (!this.autofilled) {
+                    question.onInput = true
                 }
 
                 self.setStatusCompleteQuestions()
+                self.scrollController(i)
 
-                self.scrollController(id)
-
-            }, 0)
+            }, 300)
         },
-        validateText(field, id) {
+        validateText(i) {
+            const question = this.questions[i]
+            const { type, key } = question
 
-            if (self.autofilled) {
-                field.complete = !!field.value
+            const validateValue = (value, isUnicode = false) => {
+                return String(value).toLowerCase().match(isUnicode ? question.patternUnicode : question.pattern)
             }
 
-            this.scrollController(id)
+            // main
+            setTimeout(() => {
+
+                if (
+                    (type === 'email') ||
+                    (type === 'text' && key === 'phone_number')
+                ) {
+                    console.log('phone')
+                    question.complete = !!validateValue(question.value)
+                }
+                if (type === 'text' && key === undefined) {
+                    question.value = question.value[0].toUpperCase() + question.value.substring(1)
+                    question.complete = !!question.value
+                }
+
+                if (type === 'size') {
+                    question.complete = !!(+question.value)
+                }
+
+                if (type === 'size_two') {
+                    question.complete = !!(+question.value.ft && +question.value.in)
+                }
+
+                if (type === 'number') {
+
+                    if (key === 'year') {
+                        let value = Math.abs(('' + question.value).trim().replace(/\D/g, '').replace(/^0+/, '').slice(0, 4))
+                        const minValue = question.minValue !== undefined ? question.minValue : 0
+                        const maxValue = moment().year()
+
+                        if (value > maxValue) {
+                            value = '' + maxValue
+                        }
+                        if (('' + value).length === 4 && value < minValue) {
+                            value = '' + minValue
+                        }
+
+                        question.value = value
+
+                        if (('' + question.value).length === 4) {
+                            question.complete = +question.value >= minValue && +question.value <= maxValue;
+                        }
+
+                    }
+
+                    if (key === 'number') {
+                        question.value = +question.value
+
+                        question.complete = question.value > 0
+                    }
+                }
+
+                if (question.autofilled) {
+                    question.complete = !!question.value
+                }
+
+                this.scrollController(i)
+            }, 0)
+        },
+        validateCheckbox(i) {
+            const question = this.questions[i]
+            setTimeout(() => {
+                question.complete = question.value.length > 0
+
+                this.scrollController(i)
+            }, 0)
         },
 
         /** Check Autofill */
-        checkAnimation(e) {
+        checkAutofill(e) {
             if(e.animationName === "onAutoFillStart") {
                 this.autofilled = true;
             }
@@ -1032,7 +1100,8 @@ export default {
 
                             if (q.type === 'user_name' && !q.onInput) {
                                 q.onInput = false
-                                complete = !!q.value.full_name && !!q.value.last_name
+                                const { full_name, last_name } = q.value
+                                complete = q.complete === undefined ? !!full_name && !!last_name : q.complete
                             }
                         }
 
@@ -1046,15 +1115,12 @@ export default {
                     // TYPE Checkbox
                     // Value is Array
                     else if (typeof q.value === 'object' && Array.isArray(q.value) && q.value !== null) {
-                        complete = q.value.length > 0
+                        complete = q.complete === undefined ? q.value.length > 0 : q.complete
                     }
 
                     // Email
                     else if (['email', 'text', 'number'].includes(q.type)) {
                         complete = q.complete === undefined ? !!q.value : q.complete
-
-                        // if (q.title === 'What year was your home built?')
-                        //     console.log('set status: ', q.title, q.complete)
                     }
 
                     // Value is String

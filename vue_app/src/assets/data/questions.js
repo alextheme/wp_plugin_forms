@@ -131,7 +131,6 @@ const formData = {
             title: 'TEST... Number',
             value: '',
             type: 'number',
-            validation: 'required|number',
         },
         {
             title: 'TEST... Size',
@@ -151,13 +150,11 @@ const formData = {
             value: '',
             type: 'email',
             name: 'Your Email',
-            validation: 'email',
         },
         {
             title: "TEST... Text",
             value: '',
             type: 'text',
-            validation: 'required|length:3',
         },
         {
             title: "TEST... Checkbox",
@@ -381,13 +378,17 @@ const formData = {
             title: 'What year was your home built?',
             value: '',
             type: 'number',
-            validation: 'required|number|between:1900,2025',
+            key: 'year',
+            minValue: 1800,
+            step: 1,
         },
         {
             title: 'What is the square footage?',
             value: '',
             type: 'number',
-            validation: 'required|number|between:1,2000',
+            key: 'number',
+            minValue: 0,
+            step: 0.1,
         },
         {
             title: 'How many stories is your home?',
@@ -411,7 +412,9 @@ const formData = {
             title: 'What year did you purchase your home?',
             value: '',
             type: 'number',
-            validation: 'required|number|between:1900,2025',
+            key: 'year',
+            minValue: 1800,
+            step: 1,
         },
         whatIsYourName,
         whatIsYourDateOfBirth,
@@ -434,8 +437,10 @@ const formData = {
             title: "Last question Ertgerg, how much would \n it cost to rebuild your home?",
             descr: 'Rebuild cost is different from market value. If you’re not sure we recommend using $150 per sq ft.',
             value: '',
-            validation: 'required',
             type: 'number',
+            key: 'number',
+            minValue: 0,
+            step: 1,
         },
         whatIsYourEmail,
         whatIsYourPhoneNumber,
@@ -451,17 +456,12 @@ const formData = {
                 ft: '',
                 in: ''
             },
-            validation: {
-                ft: 'required|number',
-                in: 'required|number',
-            },
             type: 'size_two',
         },
         {
             title: 'How Much Do you Weigh?',
             value: '',
             type: 'size',
-            validation: 'required|number',
         },
         {
             title: "Do You Use Tobacco?",
@@ -535,7 +535,6 @@ const formData = {
             title: "What is the Name of Your Business?",
             value: '',
             type: 'text',
-            validation: 'required|length:3',
             show: true,
         },
         {
@@ -550,7 +549,6 @@ const formData = {
             title: "Brief Description of Your Business",
             value: '',
             type: 'text',
-            validation: 'required|length:3',
         },
         {
             title: "Years in Business",

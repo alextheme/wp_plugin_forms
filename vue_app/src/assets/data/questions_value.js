@@ -53,6 +53,10 @@ const auto = () => {
     q.auto[29].value.apt = ''
     q.auto[29].value.state = 'MN'
     q.auto[29].value.zip = '4321'
+
+    q.auto[30].value = 'favorstreet21@gmail.com'
+    // q.auto[31].value = '1234567890'
+
 }
 const home = () => {
     q.home[0].value = 'Townhome'
@@ -82,10 +86,11 @@ const home = () => {
     q.home[12].value = 'Masters Degree'
     q.home[13].value = 'Clergy'
     q.home[14].value = 'Poor (300-400)'
-    // q.home[15].value = 'Yes'
-    // q.home[16].value = 'AMICA'
-    // q.home[17].value = '2-3 years'
-    // q.home[18].value = '4-6 Month'
+
+    q.home[15].value = 'Yes'
+    q.home[16].value = 'AMICA'
+    q.home[17].value = '2-3 years'
+    q.home[18].value = '4-6 Month'
     // q.home[19].value = 'Что то уту'
 }
 const life = () => {
@@ -205,12 +210,12 @@ const bike = () => {
     q.bike[12].value.full_name = 'Solomon'
     q.bike[12].value.last_name = 'Mudryi'
 
-    q.bike[13].value.address = 'Shevchenko, 55'
-    q.bike[13].value.unit = '5555'
-    q.bike[13].value.apt = 'apt bike ...'
-    q.bike[13].value.city = 'Berdychiv 5'
-    q.bike[13].value.state = 'AZ'
-    q.bike[13].value.zip = '55555'
+    // q.bike[13].value.address = 'Shevchenko, 55'
+    // q.bike[13].value.unit = '5555'
+    // q.bike[13].value.apt = 'apt bike ...'
+    // q.bike[13].value.city = 'Berdychiv 5'
+    // q.bike[13].value.state = 'AZ'
+    // q.bike[13].value.zip = '55555'
 
     q.bike[14].value = '!favorstreet21@gmail.com'
     q.bike[15].value = '22334400'
@@ -243,7 +248,7 @@ const renters = () => {
 }
 
 
-auto()
+// auto()
 // home()
 // life()
 // health()

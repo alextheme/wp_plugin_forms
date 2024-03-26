@@ -18,13 +18,6 @@ export const address =  {
 
         'DC', 'AS', 'GU', 'MP', 'PR', 'VI'
     ],
-    validation: {
-        address: 'required|length:10',
-        unit: 'required|number',
-        apt: '',
-        state: '',
-        zip: 'required'
-    },
     type: 'address',
 }
 
@@ -33,10 +26,6 @@ export const addressV2   =  {
     value: {
         ...address.value,
         city: ''
-    },
-    validation: {
-        ...address.validation,
-        city: 'required|length:3'
     },
     type: 'address_v2',
 }
@@ -52,8 +41,6 @@ export const whatIsYourDateOfBirth = {
             show: false
         }
     },
-    // validation in function "validateDate()" and "validateAge()"
-    validation: '',
     type: 'user_birth',
 }
 
@@ -63,10 +50,6 @@ export const whatIsYourName =  {
     value: {
         full_name: '',
         last_name: ''
-    },
-    validation: {
-        full_name: 'required|length:3',
-        last_name: 'required|length:3'
     },
     type: 'user_name',
 }
@@ -153,8 +136,6 @@ export const whatIsYourOccupation = {
     type: 'select',
 }
 
-
-
 export const whatIsYourCreditScore = {
     title: "What is your credit score?",
     value: '',
@@ -220,15 +201,18 @@ export const whatIsYourEmail = {
     value: '',
     type: 'email',
     name: 'Your Email',
-    validation: 'email',
+    pattern: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+    patternUnicode: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
 
 export const whatIsYourPhoneNumber = {
     title: "What is Your Phone Number?",
     value: '',
     type: 'text',
+    key: 'phone_number',
     name: 'Phone Number',
-    validation: 'required|length:5',
+    pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+    show: true
 }
 
 export const anyAtFaultAccidentsInTheLast3Years = {
