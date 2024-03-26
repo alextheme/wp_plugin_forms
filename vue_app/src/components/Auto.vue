@@ -276,27 +276,6 @@
                             </div>
                         </li>
 
-                        <li v-if="['text', 'number', 'email'].includes(field.type) && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--text_one', 'q_item--field_type__'+field.type, {show: field.show, complete: field.complete} ]">
-                            <question-header :title="field.title" :descr="field.descr" />
-
-                            <FormKit :name="'user_' + field.type" type="group">
-                                <template #default="{ state: { valid } }">
-                                    <FormKit
-                                        v-model="field.value"
-                                        :type="field.type"
-                                        :name="field.name || field.title"
-                                        :validation="field.validation"
-                                        :delay="0"
-
-                                        validation-visibility="live"
-                                        @animationstart="checkAnimation"
-                                        :complete="field.complete = valid"
-                                        @input="validateText(field, i)"
-                                    />
-                                </template>
-                            </FormKit>
-                        </li>
-
                     </template>
                 </template>
 

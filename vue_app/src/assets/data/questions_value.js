@@ -15,7 +15,7 @@ const auto = () => {
     q.auto[6].value = '$1000'
     q.auto[7].value = 'No'
 
-    // q.auto[8].value.auto_year = 1999
+    // q.auto[8].value.auto_year = '1999'
     // q.auto[8].value.auto_make = 'Audi'
     // q.auto[8].value.auto_model = 'A3'
     //
@@ -27,9 +27,9 @@ const auto = () => {
     q.auto[13].value.full_name = 'Oleksandr'
     q.auto[13].value.last_name = 'Borymskyi'
 
-    q.auto[14].value.mm = 5
-    q.auto[14].value.dd = 25
-    q.auto[14].value.yyyy = 2000
+    q.auto[14].value.mm = '05'
+    q.auto[14].value.dd = '25'
+    q.auto[14].value.yyyy = '2000'
 
     q.auto[15].value = 'Male'
     q.auto[16].value = 'Yes'
@@ -243,7 +243,7 @@ const renters = () => {
 }
 
 
-// auto()
+auto()
 // home()
 // life()
 // health()

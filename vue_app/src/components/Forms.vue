@@ -119,7 +119,7 @@
                                     :class="{ show: true }"
                                     :options="field.options.years"
                                     :default="field.value.auto_year"
-                                    @input="validateSelectAuto('auto_year', $event.value)"
+                                    @input="validateSelectAuto('auto_year', $event.value, i)"
                                     @click="loadAutoData($event, 'select_auto__year', i)"
                                 />
                                 <select-dropdown
@@ -127,7 +127,7 @@
                                     :options="field.options.makes"
                                     :default="field.value.auto_make"
                                     :load="field.load.makes"
-                                    @input="validateSelectAuto('auto_make', $event.value)"
+                                    @input="validateSelectAuto('auto_make', $event.value, i)"
                                     @click="loadAutoData($event, 'select_auto__makes', i)"
                                 />
                                 <select-dropdown
@@ -135,7 +135,7 @@
                                     :options="field.options.models"
                                     :default="field.value.auto_model"
                                     :load="field.load.models"
-                                    @input="validateSelectAuto('auto_model', $event.value)"
+                                    @input="validateSelectAuto('auto_model', $event.value, i)"
                                     @click="loadAutoData($event, 'select_auto__model', i)"
                                 />
                             </div>
@@ -146,7 +146,7 @@
                             <select-dropdown
                                 :default="field.value"
                                 :options="field.options"
-                                @input="validateSelect($event.value, i, field)"
+                                @input="validateSelect($event.value, i)"
                             />
                         </li>
 
@@ -161,7 +161,7 @@
                                 v-model="field.value"
                                 type="radio"
                                 :options="field.options"
-                                @input="validateRadio(field, i)"
+                                @input="validateRadio(i)"
                             />
                         </li>
 
@@ -172,22 +172,22 @@
                                 name="coverage_radio"
                                 type="radio"
                                 :options="field.options"
-                                @input="scrollController(field.type, i)"
+                                @input="scrollController(i)"
                             >
                                 <template #label="context">
-                            <span class="label__in">
-                                <span class="title">{{ context.option.value }}</span>
-                                <span class="stars">
-                                    <span class="icon_wrapper icon_star_wrap" v-for="star in context.option.star">
-                                        <svg class="icon icon_star" width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10.5767 2.21993C10.9183 1.39864 12.0817 1.39864 12.4233 2.21993L14.4395 7.06735C14.5835 7.41358 14.9091 7.65015 15.2829 7.68012L20.5161 8.09966C21.4027 8.17074 21.7623 9.27725 21.0867 9.85592L17.0996 13.2713C16.8148 13.5153 16.6904 13.8981 16.7774 14.2628L17.9956 19.3695C18.202 20.2348 17.2607 20.9186 16.5016 20.455L12.0213 17.7184C11.7012 17.5229 11.2988 17.5229 10.9787 17.7184L6.4984 20.455C5.7393 20.9186 4.79805 20.2348 5.00444 19.3695L6.22257 14.2628C6.30958 13.8981 6.18521 13.5153 5.90042 13.2713L1.91328 9.85592C1.23774 9.27725 1.59727 8.17074 2.48392 8.09966L7.71712 7.68012C8.09091 7.65015 8.41652 7.41358 8.56052 7.06735L10.5767 2.21993Z" fill="#F1B312" stroke="#F1B312" stroke-width="2"/>
-                                        </svg>
+                                    <span class="label__in">
+                                        <span class="title">{{ context.option.value }}</span>
+                                        <span class="stars">
+                                            <span class="icon_wrapper icon_star_wrap" v-for="star in context.option.star">
+                                                <svg class="icon icon_star" width="23" height="22" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.5767 2.21993C10.9183 1.39864 12.0817 1.39864 12.4233 2.21993L14.4395 7.06735C14.5835 7.41358 14.9091 7.65015 15.2829 7.68012L20.5161 8.09966C21.4027 8.17074 21.7623 9.27725 21.0867 9.85592L17.0996 13.2713C16.8148 13.5153 16.6904 13.8981 16.7774 14.2628L17.9956 19.3695C18.202 20.2348 17.2607 20.9186 16.5016 20.455L12.0213 17.7184C11.7012 17.5229 11.2988 17.5229 10.9787 17.7184L6.4984 20.455C5.7393 20.9186 4.79805 20.2348 5.00444 19.3695L6.22257 14.2628C6.30958 13.8981 6.18521 13.5153 5.90042 13.2713L1.91328 9.85592C1.23774 9.27725 1.59727 8.17074 2.48392 8.09966L7.71712 7.68012C8.09091 7.65015 8.41652 7.41358 8.56052 7.06735L10.5767 2.21993Z" fill="#F1B312" stroke="#F1B312" stroke-width="2"/>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                        <span class="footer_text">
+                                            <span class="text" v-for="text in context.option.descr.split('\n').map(s => s.trim())">{{ text }}</span>
+                                        </span>
                                     </span>
-                                </span>
-                                <span class="footer_text">
-                                    <span class="text" v-for="text in context.option.descr.split('\n').map(s => s.trim())">{{ text }}</span>
-                                </span>
-                            </span>
                                 </template>
                             </FormKit>
                         </li><!-- /Stars -->
@@ -202,14 +202,14 @@
                                     v-model="field.value"
                                     type="radio"
                                     :options="field.options.radio"
-                                    @input="validateRadioAndSelect($event.value, field, 'radio', i)"
+                                    @input="validateRadioAndSelect($event.value, 'radio', i)"
                                 />
                                 <select-dropdown
                                     id="radio_and_select__select"
                                     name="select_make__select"
                                     :default="field.value"
                                     :options="field.options.select"
-                                    @input="validateRadioAndSelect($event.value, field, 'select', i)"
+                                    @input="validateRadioAndSelect($event.value, 'select', i)"
                                 />
                             </div>
                         </li>
@@ -220,7 +220,7 @@
                                 v-model="field.value"
                                 type="checkbox"
                                 :options="field.options"
-                                @input="scrollController(field.type, i)"
+                                @input="scrollController(i)"
                             />
                         </li>
 
@@ -229,50 +229,51 @@
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item_in">
-                                <FormKit
-                                    name="user_age"
-                                    type="group"
-                                >
-
-                                    <FormKit
-                                        v-model="field.value.mm"
-                                        type="number"
-                                        label="Month"
-                                        number
-                                        name="mm"
-                                        :value="field.value.mm"
-                                        :validation-rules="{ validateDate }"
-                                        validation="validateDate"
-                                        @input="validateDate(field.type, i)"
-                                        validation-visibility="live"
-                                    />
-
-                                    <FormKit
-                                        v-model="field.value.dd"
-                                        type="number"
-                                        label="Day"
-                                        number
-                                        name="dd"
-                                        :value="field.value.dd"
-                                        :validation-rules="{ validateDate }"
-                                        validation="validateDate"
-                                        @input="validateDate(field.type, i)"
-                                        validation-visibility="live"
-                                    />
-
-                                    <FormKit
-                                        v-model="field.value.yyyy"
-                                        type="number"
-                                        label="Year"
-                                        number
-                                        name="yyyy"
-                                        :value="field.value.yyyy"
-                                        :validation-rules="{ validateDate }"
-                                        validation="validateDate"
-                                        @input="validateDate(field.type, i)"
-                                        validation-visibility="live"
-                                    />
-                                </FormKit>
+                                <div class="formkit-outer">
+                                    <div class="formkit-wrapper">
+                                        <label class="formkit-label" for="input_month">Month</label>
+                                        <div class="formkit-inner">
+                                            <input class="formkit-input"
+                                                   type="text"
+                                                   name="mm"
+                                                   id="input_month"
+                                                   :data-value="field.value.mm"
+                                                   v-model="field.value.mm"
+                                                   @input="validateDate('m', i, $event)"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="formkit-outer">
+                                    <div class="formkit-wrapper">
+                                        <label class="formkit-label" for="input_day">Day</label>
+                                        <div class="formkit-inner">
+                                            <input class="formkit-input"
+                                                   type="text"
+                                                   name="dd"
+                                                   id="input_day"
+                                                   :value="field.value.dd"
+                                                   v-model="field.value.dd"
+                                                   @input="validateDate('d', i, $event)"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="formkit-outer">
+                                    <div class="formkit-wrapper">
+                                        <label class="formkit-label" for="input_year">Year</label>
+                                        <div class="formkit-inner">
+                                            <input class="formkit-input"
+                                                   type="text"
+                                                   name="yyyy"
+                                                   id="input_year"
+                                                   :value="field.value.yyyy"
+                                                   v-model="field.value.yyyy"
+                                                   @input="validateDate('y', i, $event)"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div v-if="field.value.error.show" class="field_messages">
@@ -451,7 +452,7 @@
                                 name="lbs"
                                 :validation="field.validation"
                                 :delay="500"
-                                @input="scrollController(field.type, i)"
+                                @input="scrollController(i)"
                             />
                         </li>
 
@@ -475,7 +476,7 @@
                                             name="ft"
                                             :validation="field.validation.ft"
                                             :delay="500"
-                                            @input="scrollController(field.type, i)"
+                                            @input="scrollController(i)"
                                         />
 
                                         <FormKit
@@ -485,7 +486,7 @@
                                             name="in"
                                             :validation="field.validation.in"
                                             :delay="500"
-                                            @input="scrollController(field.type, i)"
+                                            @input="scrollController(i)"
                                         />
                                     </template>
 
@@ -567,7 +568,7 @@ export default {
             tab: {active: 0, complete: [0, 0, 0, 0], available: [0, 0, 0, 0]},
             nav: { auto: ['Vehicles', 'Drivers', 'Final Details', 'Quotes'], home: ['Home', 'Owner', 'Final Details', 'Quotes'] },
             tabs: { auto: [13, 24, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
-            isValidDate: {mm: false, dd: false, yyyy: false},
+            //isValidDate: {mm: false, dd: false, yyyy: false},
             userNameValid: false,
             userNameObj: '',
             auto_make: '',
@@ -664,9 +665,8 @@ export default {
             const self = this
 
             if (!event.target.classList.contains('selected')) {
-                self.scrollController(fieldType, id)
+                self.scrollController(id)
             }
-
 
             if (fieldType === 'select_auto__year') {
 
@@ -723,29 +723,28 @@ export default {
         },
 
         /** Validate Field */
-        validateSelectAuto(key, value) {
-            const selectAuto = this.questions[this.inxQuestion.selectAuto]
+        validateSelectAuto(key, value, i) {
+            const q = this.questions[i]
 
-            if (!selectAuto) return
-
-            selectAuto.value[key] = value
-            selectAuto.complete = !!(selectAuto.value.auto_year && selectAuto.value.auto_make && selectAuto.value.auto_model)
+            q.value[key] = value
+            q.complete = !!(q.value.auto_year && q.value.auto_make && q.value.auto_model)
 
             if (key === 'auto_make') {
                 this.auto_make = value
             }
         },
-        validateSelect(value, i, field) {
-            this.questions[i].value = value
-            this.questions[i].complete = !!value
+        validateSelect(value, i) {
+            const question = this.questions[i]
+            question.value = value
+            question.complete = !!value
 
-            if (field.key === 'select_insured_company') {
+            if (question.key === 'select_insured_company') {
                 this.company_name = value
             }
 
-            this.scrollController(field.type, i)
+            this.scrollController(i)
         },
-        validateRadioAndSelect(value, field, type, i) {
+        validateRadioAndSelect(value, type, i) {
 
             if (type === 'radio') {
                 const select = document.getElementById('radio_and_select__select')
@@ -759,28 +758,29 @@ export default {
             }
 
             if (type === 'select') {
-                field.value = value
+                this.questions[i].value = value
             }
 
-            this.setMotorcycleModels(field)
-            this.scrollController(field.type, i)
+            this.setMotorcycleModels(i)
+            this.scrollController(i)
         },
-        validateRadio(field, i) {
+        validateRadio(i) {
+            const question = this.questions[i]
 
-            if (field.key === 'add_second_vehicle') {
+            if (question.key === 'add_second_vehicle') {
                 const self = this
                 setTimeout(() => {
-                    self.isSecondVehicle = ('yes' === field.value?.toLowerCase())
+                    self.isSecondVehicle = ('yes' === question.value?.toLowerCase())
                     this.managerTabs()
                 }, 0)
             }
 
-            if (field.key === 'is_insured') {
+            if (question.key === 'is_insured') {
                 const self = this
                 setTimeout(() => {
                     this.questions.forEach(q => {
                         if (q.parent === 'is_insured') {
-                            if ('yes' === field.value?.toLowerCase()) {
+                            if ('yes' === question.value?.toLowerCase()) {
                                 q.active = 1
                                 q.complete = false
                             } else {
@@ -794,25 +794,26 @@ export default {
                 }, 0)
             }
 
-            this.scrollController(field.type, i)
+            this.scrollController(i)
         },
-        validateDate(node, id) {
-            if (node === 'user_birth') {
-                this.scrollController(node, id)
+        validateDate(field, i, event) {
+            const question = this.questions[i]
+
+            if (question.type === 'user_birth') {
+                this.scrollController(i)
             }
 
-            if (this.questions[this.inxQuestion.birth].optional) {
-                this.questions[this.inxQuestion.birth].value.error.show = false
-                this.questions[this.inxQuestion.birth].show = true
-                this.questions[this.inxQuestion.birth].complete = true
+            if (question.optional) {
+                question.value.error.show = false
+                question.show = true
+                question.complete = true
                 return
             }
 
-            const parent = node.at('$parent')
-
-            if (!parent.value) return true
-
-            const { mm, dd, yyyy } = parent.value
+            const htmlElem = this.$refs['qs' + i][0]
+            const fMonth = htmlElem.querySelector('input[name="mm"]')
+            const fDay = htmlElem.querySelector('input[name="dd"]')
+            const fYear = htmlElem.querySelector('input[name="yyyy"]')
             const getMaxDate = (month, year) => {
                 if (month === 2) {
                     return year ? moment(`${year}-02`, 'YYYY-MM').daysInMonth() : 29
@@ -821,36 +822,73 @@ export default {
                 }
             }
 
-            let isValid
+            setTimeout(() => {
+                if (field === 'm' || field === 'd') {
+                    let value = Math.abs(event.target.value.trim().replace(/\D/g, '').replace(/^0+/, '').slice(0, 2))
+                    const maxValue = field === 'm' ? 12 : getMaxDate(+question.value.mm, +question.value.yyyy)
 
-            switch (node.name) {
-                case 'mm':
-                    this.isValidDate.mm = !(mm < 1 || mm > 12)
-                    isValid = this.isValidDate.mm
-                    break
-                case 'dd':
-                    this.isValidDate.dd = !(dd < 1 || dd > getMaxDate(mm, yyyy))
-                    isValid = this.isValidDate.dd
-                    break
-                case 'yyyy':
-                    this.isValidDate.yyyy = !(yyyy < 1900 || yyyy > 2024)
-                    isValid = this.isValidDate.yyyy
-                    break
-            }
+                    if (value > maxValue) {
+                        value = +(('' + value).charAt(0))
+                    }
+                    if (value !== 0) {
+                        value = (('' + value).padStart(2, '0'))
+                    }
 
-            let isAge = -1
-            const isDateValid = this.isValidDate.mm && this.isValidDate.dd && this.isValidDate.yyyy
+                    question.value[field === 'm' ? 'mm' : 'dd'] = value
 
-            if (isDateValid) {
-                isAge = this.validateAge(mm, dd, yyyy)
-            }
+                    if (value.length === 2) {
+                        setTimeout(() => {
+                            if (field === 'm') {
+                                fDay.focus(); fDay.select()
+                            } else {
+                                fYear.focus(); fYear.select()
+                            }
+                        }, 1000)
+                    }
+                }
 
-            if (parent.name === 'user_age') {
-                this.questions[this.inxQuestion.birth].value.error.show = isAge === 0
-                this.questions[this.inxQuestion.birth].complete = isAge === 1 && isDateValid
-            }
+                if (field === 'y') {
+                    let value = Math.abs(event.target.value.trim().replace(/\D/g, '').replace(/^0+/, '').slice(0, 4))
+                    const minValue = 1925
+                    const maxValue = moment().year()
 
-            return isValid
+                    if (value > maxValue) {
+                        value = '' + maxValue
+                    }
+                    if (('' + value).length === 4 && value < minValue) {
+                        value = '' + minValue
+                    }
+
+                    question.value.yyyy = value
+                }
+
+
+                setTimeout(() => {
+                    const minAge = 18
+                    const { mm, dd, yyyy } = question.value
+                    const isAge = this.validateAge( +mm, +dd, +yyyy, minAge )
+                    let errorShow = false
+
+                    if (isAge === 1) {
+                        question.value.error.show = false
+                        question.show = true
+                        question.complete = true
+                    } else {
+                        if (isAge === 0) {
+                            question.value.error.text = 'Driver Must be at least '+ minAge +' years old.'
+                            question.value.error.show = true
+                        } else {
+                            if (yyyy.length === 4) {
+                                question.value.error.text = 'Please enter a valid date.'
+                                question.value.error.show = true
+                            }
+                        }
+                    }
+
+                }, 1000)
+            }, 300)
+
+
         },
         validateAge(month, day, year, minAge = 18) {
             if ([month, day, year].includes(undefined)) {
@@ -891,7 +929,7 @@ export default {
                 return -1
             }
         },
-        validateUserName(field, valid, key, id) {
+        validateUserName(field, valid, key, i) {
 
             setTimeout(() => {
                 if (this.autofilled) {
@@ -903,7 +941,7 @@ export default {
                 }
             }, 300)
 
-            this.scrollController(key, id)
+            this.scrollController(i)
         },
         validateAddress(field, name, id, value, valid) {
             const self = this
@@ -928,7 +966,7 @@ export default {
 
                 self.setStatusCompleteQuestions()
 
-                self.scrollController(field.type, id)
+                self.scrollController(id)
 
             }, 0)
         },
@@ -938,7 +976,7 @@ export default {
                 field.complete = !!field.value
             }
 
-            this.scrollController(field.type, id)
+            this.scrollController(id)
         },
 
         /** Check Autofill */
@@ -952,7 +990,8 @@ export default {
         },
 
         /** Set options motorcycle models  */
-        setMotorcycleModels(fieldSelectMotorcycleMake) {
+        setMotorcycleModels(i) {
+            const fieldSelectMotorcycleMake = this.questions[i]
             setTimeout(() => {
                 if (fieldSelectMotorcycleMake.key === 'select_motorcycle_make') {
                     const fieldSelectModels = this.qs.find(q => q.key === 'select_motorcycle_models')
@@ -1190,17 +1229,18 @@ export default {
                 }
             });
         },
-        scrollController(typeField, id) {
+        scrollController(id) {
             const is_insured = this.questions.find(q => q.key === 'is_insured')
-            if (is_insured.value.toLowerCase() === 'yes' && id === is_insured.id + 1) {
+            if (is_insured && is_insured.value.toLowerCase() === 'yes' && id === is_insured.id + 1) {
                 id = is_insured.id
             }
-            
+
             const htmlElem = this.$refs['qs' + id][0]
             const elemCoord = this.getCoords(htmlElem)
 
             let offsetY = this.isTabs ? -80 : -40
-            if (['radio', 'radio_star', 'select', 'radio_select'].includes(typeField)) {
+
+            if (['radio', 'radio_star', 'select', 'radio_select'].includes(this.questions[id].type)) {
                 offsetY = elemCoord.height - (this.isTabs ? 20 : -20)
             }
 

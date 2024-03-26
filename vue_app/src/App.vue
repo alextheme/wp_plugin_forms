@@ -1,21 +1,21 @@
 <template>
     <div class="base" id="form_insurance">
 
-        <forms v-if="form!=='auto'" :form="form" :qs="qs"></forms>
-        <auto v-if="form==='auto'" :form="form" :qs="qs"></auto>
+        <forms :form="form" :qs="qs"></forms>
+<!--        <forms v-if="form!=='auto'" :form="form" :qs="qs"></forms>-->
+<!--        <auto2 v-if="form==='auto'" :form="form" :qs="qs"></auto2>-->
 
     </div>
 </template>
 
 <script>
 import Forms from './components/Forms.vue'
-import Auto from './components/Auto.vue'
 // import questions from './assets/data/questions.js'
 import questions from './assets/data/questions_value.js'
 // window.formId = 'test'
 
 export default {
-    components: { Forms, Auto },
+    components: { Forms },
 
     data: () => ({
         form: window.formId,
