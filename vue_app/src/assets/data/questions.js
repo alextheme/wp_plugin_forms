@@ -377,6 +377,7 @@ const formData = {
         {
             title: 'What year was your home built?',
             value: '',
+            placeholder: 'YYYY',
             type: 'number',
             key: 'year',
             minValue: 1800,
@@ -411,6 +412,7 @@ const formData = {
         {
             title: 'What year did you purchase your home?',
             value: '',
+            placeholder: 'YYYY',
             type: 'number',
             key: 'year',
             minValue: 1800,

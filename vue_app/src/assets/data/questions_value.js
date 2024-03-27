@@ -13,16 +13,16 @@ const auto = () => {
     q.auto[4].value = 'Full Coverage'
     q.auto[5].value = '$1000'
     q.auto[6].value = '$1000'
-    q.auto[7].value = 'No'
+    q.auto[7].value = 'Yes'
 
-    // q.auto[8].value.auto_year = '1999'
-    // q.auto[8].value.auto_make = 'Audi'
-    // q.auto[8].value.auto_model = 'A3'
-    //
-    // q.auto[9].value = 'Pleasure'
-    // q.auto[10].value = 20
-    // q.auto[11].value = 'Finance'
-    // q.auto[12].value = 'Full Coverage'
+    q.auto[8].value.auto_year = '1999'
+    q.auto[8].value.auto_make = 'Audi'
+    q.auto[8].value.auto_model = 'A3'
+
+    q.auto[9].value = 'Pleasure'
+    q.auto[10].value = 20
+    q.auto[11].value = 'Finance'
+    q.auto[12].value = 'Full Coverage'
 
     q.auto[13].value.full_name = 'Oleksandr'
     q.auto[13].value.last_name = 'Borymskyi'
@@ -55,7 +55,7 @@ const auto = () => {
     q.auto[29].value.zip = '4321'
 
     q.auto[30].value = 'favorstreet21@gmail.com'
-    // q.auto[31].value = '1234567890'
+    q.auto[31].value = '1234567890'
 
 }
 const home = () => {
@@ -91,7 +91,10 @@ const home = () => {
     q.home[16].value = 'AMICA'
     q.home[17].value = '2-3 years'
     q.home[18].value = '4-6 Month'
-    // q.home[19].value = 'Что то уту'
+    q.home[19].value = 'Что то уту'
+
+    q.home[20].value = 'favorstreet21@gmail.com'
+    q.home[21].value = '123456789'
 }
 const life = () => {
     q.life[0].value.dd = 18
@@ -192,7 +195,7 @@ const commercial = () => {
 const bike = () => {
     q.bike[0].value = 2000
     q.bike[1].value = 'Kawasaki'
-    q.bike[2].value = 'EN650'
+    q.bike[2].value = 'BJ'
     q.bike[3].value = 'Yes'
     q.bike[4].value = 'AAA Insurance Co.'
     q.bike[5].value = '1-2 years'
@@ -210,12 +213,12 @@ const bike = () => {
     q.bike[12].value.full_name = 'Solomon'
     q.bike[12].value.last_name = 'Mudryi'
 
-    // q.bike[13].value.address = 'Shevchenko, 55'
-    // q.bike[13].value.unit = '5555'
-    // q.bike[13].value.apt = 'apt bike ...'
-    // q.bike[13].value.city = 'Berdychiv 5'
-    // q.bike[13].value.state = 'AZ'
-    // q.bike[13].value.zip = '55555'
+    q.bike[13].value.address = 'Shevchenko, 55'
+    q.bike[13].value.unit = '5555'
+    q.bike[13].value.apt = 'apt bike ...'
+    q.bike[13].value.city = 'Berdychiv 5'
+    q.bike[13].value.state = 'AZ'
+    q.bike[13].value.zip = '55555'
 
     q.bike[14].value = '!favorstreet21@gmail.com'
     q.bike[15].value = '22334400'
@@ -248,7 +251,7 @@ const renters = () => {
 }
 
 
-// auto()
+auto()
 // home()
 // life()
 // health()

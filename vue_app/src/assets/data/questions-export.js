@@ -41,6 +41,7 @@ export const whatIsYourDateOfBirth = {
             show: false
         }
     },
+    minAge: 18,
     type: 'user_birth',
 }
 
@@ -73,7 +74,6 @@ export const whatIsYourGenderOptional = {
     value: '',
     options: ['Male', 'Female'],
     type: 'radio',
-    show: true,
     optional: true,
     complete: true,
 }
@@ -96,7 +96,7 @@ export const whatIsYourOccupation = {
     title: "What is your occupation?",
     value: '',
     options: [
-        'Select Engineer',
+        '',
         'Administrative Clerical',
         'Architect',
         'Business Owner',
@@ -212,7 +212,6 @@ export const whatIsYourPhoneNumber = {
     key: 'phone_number',
     name: 'Phone Number',
     pattern: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
-    show: true
 }
 
 export const anyAtFaultAccidentsInTheLast3Years = {

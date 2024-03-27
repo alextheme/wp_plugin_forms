@@ -236,6 +236,7 @@
                                             <input class="formkit-input"
                                                    type="text"
                                                    name="mm"
+                                                   placeholder="MM"
                                                    id="input_month"
                                                    :data-value="field.value.mm"
                                                    v-model="field.value.mm"
@@ -251,6 +252,7 @@
                                             <input class="formkit-input"
                                                    type="text"
                                                    name="dd"
+                                                   placeholder="DD"
                                                    id="input_day"
                                                    :value="field.value.dd"
                                                    v-model="field.value.dd"
@@ -266,6 +268,7 @@
                                             <input class="formkit-input"
                                                    type="text"
                                                    name="yyyy"
+                                                   placeholder="YYYY"
                                                    id="input_year"
                                                    :value="field.value.yyyy"
                                                    v-model="field.value.yyyy"
@@ -322,86 +325,43 @@
 
                         </li>
 
-                        <li v-if="field.type === 'address' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--address_mod', {show: field.show, complete: field.complete} ]">
+                        <li v-if="(field.type === 'address' || field.type === 'address_v2') && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, { 'q_item--address_mod': field.type === 'address', 'q_item--address_v2_mod': field.type === 'address_v2', show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item_in">
 
-                                <FormKit name="user_name" type="group">
+                                <FormKit :name="field.type" type="group" v-model="field.value">
                                     <FormKit
                                         v-model="field.value.address"
                                         name="address"
                                         label="Address"
                                         type="text"
-                                        @input="validateAddress('address', i, $event.value)"
                                         @animationstart="checkAutofill"
+                                        @input="validateAddress('address', i, $event.value)"
                                     />
                                     <FormKit
                                         v-model="field.value.unit"
                                         name="unit"
                                         label="Unit #"
                                         type="text"
+                                        @animationstart="checkAutofill"
                                         @input="validateAddress('unit', i, $event.value)"
-                                        @animationstart="checkAutofill"
                                     />
                                     <FormKit
-                                        v-model="field.value.apt"
-                                        name="apt"
-                                        label="Apt or unit (optional)"
-                                        type="text"
-                                        @input="validateAddress('apt', i, $event.value)"
-                                        @animationstart="checkAutofill"
-                                    />
-
-                                    <div class="select_dropdown">
-                                        <label>State: </label>
-                                        <select-dropdown
-                                            name="state"
-                                            :default="field.value.state"
-                                            :options="field.options"
-                                            @input="validateAddress('state', i, $event.value)"
-                                        />
-                                    </div>
-
-                                    <FormKit
-                                        v-model="field.value.zip"
-                                        label="Enter ZIP Code"
-                                        type="text"
-                                        name="zip"
-                                        @input="validateAddress('zip', i, $event.value)"
-                                        @animationstart="checkAutofill"
-                                    />
-                                </FormKit>
-
-                            </div>
-                        </li>
-
-                        <li v-if="field.type === 'address_v2' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--address_v2_mod', {show: field.show, complete: field.complete} ]">
-                            <question-header :title="field.title" :descr="field.descr" />
-
-                            <div class="q_item_in">
-
-                                <FormKit name="address_v2" type="group" v-model="field.value">
-                                    <FormKit
-                                        name="address"
-                                        label="Address"
-                                        type="text"
-                                        @input="validateAddress('address', i, $event.value)"
-                                        @animationstart="checkAutofill"
-                                    />
-                                    <FormKit
-                                        name="unit"
-                                        label="Unit #"
-                                        type="text"
-                                        @input="validateAddress('unit', i, $event.value)"
-                                        @animationstart="checkAutofill"
-                                    />
-                                    <FormKit
+                                        v-if="field.type === 'address_v2'"
                                         name="city"
                                         label="City"
                                         type="text"
-                                        @input="validateAddress('city', i, $event.value)"
                                         @animationstart="checkAutofill"
+                                        @input="validateAddress('city', i, $event.value)"
+                                    />
+                                    <FormKit
+                                        v-if="field.type === 'address'"
+                                        name="apt"
+                                        label="Apt or unit (optional)"
+                                        type="text"
+                                        @animationstart="checkAutofill"
+                                        @input="validateAddress('apt', i, $event.value)"
                                     />
 
                                     <div class="select_dropdown">
@@ -418,10 +378,11 @@
                                         label="Enter ZIP Code"
                                         type="text"
                                         name="zip"
-                                        @input="validateAddress('zip', i, $event.value)"
                                         @animationstart="checkAutofill"
+                                        @input="validateAddress('zip', i, $event.value)"
                                     />
                                 </FormKit>
+
                             </div>
                         </li>
 
@@ -488,6 +449,7 @@
                                             :min="field.minValue"
                                             :step="field.step"
                                             :name="field.name || field.title"
+                                            :placeholder="field.placeholder"
                                             @animationstart="checkAutofill"
                                             @input="validateText(i)"
                                         >
@@ -497,6 +459,7 @@
                                             :id="'input_' + i"
                                             :type="field.type"
                                             :name="field.name || field.title"
+                                            :placeholder="field.placeholder"
                                             @animationstart="checkAutofill"
                                             @input="validateText(i)"
                                         >
@@ -543,7 +506,7 @@ import PrivacyPolicy from './parts/PrivacyPolicy.vue'
 import SelectDropdown from './parts/SelectDropdown.vue'
 import IconOk from './parts/IconOk.vue'
 import axios from 'axios'
-import { motorcycleDatabase } from '../assets/data/moto.js'
+import {motorcycleDatabase} from '../assets/data/moto.js'
 
 export default {
     components: { Done, PrivacyPolicy, SelectDropdown, QuestionHeader, IconOk },
@@ -581,7 +544,8 @@ export default {
             return [`form--${this.form}`]
         },
         autoMake() {
-            const autoQ = this.questions[this.inxQuestion.selectAuto]
+            const index = this.questions.findIndex(q => q.type === 'select_auto')
+            const autoQ = this.questions[index]
             if (autoQ) {
                 return autoQ.value.auto_make
             } else {
@@ -590,24 +554,6 @@ export default {
         },
         progress() {
             return this.questions.filter(q => q.complete).length * 100 / this.questions.length
-        },
-        /** Find Index Custom Validate Questions */
-        inxQuestion() {
-            const inxEmail = Number.parseInt(this.questions.findIndex(q => q.type === 'email'))
-            const inxBirth = Number.parseInt(this.questions.findIndex(q => q.type === 'user_birth'))
-            const inxUserName = Number.parseInt(this.questions.findIndex(q => q.type === 'user_name'))
-            const inxSelectAuto = Number.parseInt(this.questions.findIndex(q => q.type === 'select_auto'))
-
-            const inxAddr = Number.parseInt(this.questions.findIndex(q => q.type === 'address'))
-            const inxAddress = inxAddr >= 0 ? inxAddr : Number.parseInt(this.questions.findIndex(q => q.type === 'address_v2'))
-
-            return {
-                email: isNaN(inxEmail) ? -1 : inxEmail,
-                birth: isNaN(inxBirth) ? -1 : inxBirth,
-                userName: isNaN(inxUserName) ? -1 : inxUserName,
-                address: isNaN(inxAddress) ? -1 : inxAddress,
-                selectAuto: isNaN(inxSelectAuto) ? -1 : inxSelectAuto,
-            }
         },
         isTabs() {
             return !!this.tabs[this.form]
@@ -741,6 +687,8 @@ export default {
         },
         validateRadioAndSelect(value, type, i) {
 
+            const question = this.questions[i]
+
             if (type === 'radio') {
                 const select = document.getElementById('radio_and_select__select')
                 const option = select.querySelector('.item')
@@ -753,26 +701,25 @@ export default {
             }
 
             if (type === 'select') {
-                this.questions[i].value = value
+                question.value = value
             }
+
+            question.complete = !!value
 
             this.setMotorcycleModels(i)
             this.scrollController(i)
         },
         validateRadio(i) {
             const question = this.questions[i]
+            const self = this
 
-            if (question.key === 'add_second_vehicle') {
-                const self = this
-                setTimeout(() => {
+            setTimeout(() => {
+                if (question.key === 'add_second_vehicle') {
                     self.isSecondVehicle = ('yes' === question.value?.toLowerCase())
                     this.managerTabs()
-                }, 0)
-            }
+                }
 
-            if (question.key === 'is_insured') {
-                const self = this
-                setTimeout(() => {
+                if (question.key === 'is_insured') {
                     this.questions.forEach(q => {
                         if (q.parent === 'is_insured') {
                             if ('yes' === question.value?.toLowerCase()) {
@@ -786,8 +733,10 @@ export default {
                         }
                     })
                     this.managerTabs()
-                }, 0)
-            }
+                }
+            }, 0)
+
+            question.complete = !!question.value
 
             this.scrollController(i)
         },
@@ -859,7 +808,7 @@ export default {
 
 
                 setTimeout(() => {
-                    const minAge = 18
+                    const minAge = question.minAge ? question.minAge : 18
                     const { mm, dd, yyyy } = question.value
                     const isAge = this.validateAge( +mm, +dd, +yyyy, minAge )
                     let errorShow = false
@@ -947,26 +896,29 @@ export default {
             const isTypeAddress2 = question.type === 'address_v2'
 
             setTimeout(() => {
+                    question.value.zip = question.value.zip.trim().replace(/\D/g, '').slice(0, 5)
 
-                let selectedState = !!question.value.state
-
-                const { address,  unit, state, zip, city } = question.value
-
-                if (name === 'state') {
-                    console.log(value)
-                    question.value.state = value
-                    selectedState = !!value
+                const valid = {
+                    address: !!question.value.address,
+                    unit: !!question.value.unit,
+                    city: isTypeAddress2 ? !!question.value.city : true,
+                    state: !!question.value.state,
+                    zip: !!question.value.zip,
                 }
 
-                question.complete = !!address && !!unit && !!state && !!zip && selectedState && (isTypeAddress2 ? !!city : true)
+                if (name === 'state') {
+                    question.value.state = value
+                    valid.state = !!value
+                }
 
-                console.log(question.complete, address,  unit, state, zip, city)
+                question.complete = valid.address && valid.unit && valid.city && valid.state && valid.zip
+
 
                 if (!this.autofilled) {
                     question.onInput = true
                 }
 
-                self.setStatusCompleteQuestions()
+                // self.setStatusCompleteQuestions()
                 self.scrollController(i)
 
             }, 300)
@@ -982,11 +934,7 @@ export default {
             // main
             setTimeout(() => {
 
-                if (
-                    (type === 'email') ||
-                    (type === 'text' && key === 'phone_number')
-                ) {
-                    console.log('phone')
+                if (type === 'email' || (type === 'text' && key === 'phone_number')) {
                     question.complete = !!validateValue(question.value)
                 }
                 if (type === 'text' && key === undefined) {
@@ -1021,7 +969,6 @@ export default {
                         if (('' + question.value).length === 4) {
                             question.complete = +question.value >= minValue && +question.value <= maxValue;
                         }
-
                     }
 
                     if (key === 'number') {
@@ -1085,23 +1032,32 @@ export default {
                 let complete
 
                 if (q.optional) {
+
                     complete = true
+
                 } else {
 
                     // Value Is Object
-
                     if (typeof q.value === 'object' && !Array.isArray(q.value) && q.value !== null) {
-                        // Виключити з основного правила.
-                        // Для цих полів індивідуальна валідація
 
-                        // Name, Birth, Address
-                        if ([this.inxQuestion.userName, this.inxQuestion.birth, this.inxQuestion.address].includes(inxQ)) {
-                            complete = q.complete
+                        // Birth
+                        if (q.type === 'user_birth') {
+                            complete = !!q.value.dd && !!q.value.mm && !!q.value.yyyy
+                        }
 
-                            if (q.type === 'user_name' && !q.onInput) {
+                        // Address
+                        else if (q.type === 'address' || q.type === 'address_v2') {
+                            const { address, unit, apt, city, state, zip } = q.value
+                            const validCity = q.type === 'address_v2' ? !!city : true
+                            complete = !!address && !!unit && !!state && !!zip && validCity
+                        }
+
+                        // Name
+                        else if (q.type === 'user_name') {
+                            complete = !!q.value.full_name && !!q.value.last_name
+
+                            if (!q.onInput) {
                                 q.onInput = false
-                                const { full_name, last_name } = q.value
-                                complete = q.complete === undefined ? !!full_name && !!last_name : q.complete
                             }
                         }
 
@@ -1111,8 +1067,7 @@ export default {
                         }
                     }
 
-
-                    // TYPE Checkbox
+                        // TYPE Checkbox
                     // Value is Array
                     else if (typeof q.value === 'object' && Array.isArray(q.value) && q.value !== null) {
                         complete = q.complete === undefined ? q.value.length > 0 : q.complete
@@ -1125,6 +1080,7 @@ export default {
 
                     // Value is String
                     else {
+                        console.log(q.type, q.value, q.complete)
                         complete = !!q.value
                     }
                 }
