@@ -88,7 +88,7 @@
 
                     <h2 v-if="tab.active === 0" class="title">Hello, Let's see how much we can <br> save you on home insurance.</h2>
                     <h2 v-if="tab.active === 1" class="title">Ok great! <br> Let's get a few details about you.</h2>
-                    <h2 v-if="tab.active === 2" class="title">Almost done, {{ userNameObj.full_name }}<br> Just a few final details.</h2>
+                    <h2 v-if="tab.active === 2" class="title">Almost done, {{ userName.full_name }}<br> Just a few final details.</h2>
                 </template>
 
                 <template v-if="form==='auto'">
@@ -100,7 +100,7 @@
 
                     <h2 v-if="tab.active === 0" class="title">Hello, Let's see how much we can <br> save you on car insurance.</h2>
                     <h2 v-if="tab.active === 1" class="title">Ok great! <br> Let's get a few details about you.</h2>
-                    <h2 v-if="tab.active === 2" class="title">Almost done, {{ userNameObj.full_name }}<br> Just a few final details.</h2>
+                    <h2 v-if="tab.active === 2" class="title">Almost done, {{ userName.full_name }}<br> Just a few final details.</h2>
                 </template>
 
             </header>
@@ -110,8 +110,9 @@
 
                 <template v-for="(field, i) in questions">
                     <template v-if="field.group !== 'vehicle2' || field.group === 'vehicle2' && isSecondVehicle">
+                    <template v-if="field.group !== 'driver2' || field.group === 'driver2' && isSecondDriver">
 
-                        <li v-if="field.type === 'select_auto' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--select_auto', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'select_auto' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--select_auto', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item_in" :class="{ complete: field.complete }">
@@ -146,11 +147,11 @@
                             <select-dropdown
                                 :default="field.value"
                                 :options="field.options"
-                                @input="validateSelect($event.value, i)"
+                                @input="validate({ value: $event.value, i })"
                             />
                         </li>
 
-                        <li v-if="field.type === 'radio' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--radio', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'radio' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--radio', {show: field.show, complete: field.complete} ]">
                             <question-header :title="replaceTitle(field.title)" :descr="field.descr" />
 
                             <ul v-if="field.descrList?.length" class="radio__descr_list">
@@ -161,11 +162,11 @@
                                 v-model="field.value"
                                 type="radio"
                                 :options="field.options"
-                                @input="validateRadio(i)"
+                                @input="validate({ i })"
                             />
                         </li>
 
-                        <li v-if="field.type === 'radio_star' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--star_mod', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'radio_star' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--star_mod', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
                             <FormKit
                                 v-model="field.value"
@@ -192,7 +193,7 @@
                             </FormKit>
                         </li><!-- /Stars -->
 
-                        <li v-if="field.type === 'radio_select' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--radio_select', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'radio_select' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--radio_select', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item_in">
@@ -214,7 +215,7 @@
                             </div>
                         </li>
 
-                        <li v-if="field.type === 'checkbox' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--checkbox', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'checkbox' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--checkbox', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
                             <FormKit
                                 v-model="field.value"
@@ -225,7 +226,7 @@
                         </li>
 
 
-                        <li v-if="field.type === 'user_birth' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--date_mod', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'date' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--date_mod', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item_in">
@@ -235,12 +236,12 @@
                                         <div class="formkit-inner">
                                             <input class="formkit-input"
                                                    type="text"
-                                                   name="mm"
+                                                   :name="'mm_' + i"
                                                    placeholder="MM"
-                                                   id="input_month"
+                                                   :id="'input_month_' + i"
                                                    :data-value="field.value.mm"
                                                    v-model="field.value.mm"
-                                                   @input="validateDate('m', i, $event)"
+                                                   @input="validate({ name: 'm', i, event: $event })"
                                             >
                                         </div>
                                     </div>
@@ -251,12 +252,12 @@
                                         <div class="formkit-inner">
                                             <input class="formkit-input"
                                                    type="text"
-                                                   name="dd"
+                                                   :name="'dd_' + i"
                                                    placeholder="DD"
-                                                   id="input_day"
+                                                   :id="'input_day_' + i"
                                                    :value="field.value.dd"
                                                    v-model="field.value.dd"
-                                                   @input="validateDate('d', i, $event)"
+                                                   @input="validate({ name: 'd', i, event: $event })"
                                             >
                                         </div>
                                     </div>
@@ -267,12 +268,12 @@
                                         <div class="formkit-inner">
                                             <input class="formkit-input"
                                                    type="text"
-                                                   name="yyyy"
+                                                   :name="'yyyy_' + i"
                                                    placeholder="YYYY"
-                                                   id="input_year"
+                                                   :id="'input_year_' + i"
                                                    :value="field.value.yyyy"
                                                    v-model="field.value.yyyy"
-                                                   @input="validateDate('y', i, $event)"
+                                                   @input="validate({ name: 'y', i, event: $event })"
                                             >
                                         </div>
                                     </div>
@@ -284,7 +285,7 @@
                             </div>
                         </li>
 
-                        <li v-if="field.type === 'user_name' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--user_name_mod', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'user_name' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--user_name_mod', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="formkit-outer">
@@ -295,8 +296,8 @@
                                            placeholder="Full Name"
                                            class="formkit-input"
                                            type="text"
-                                           name="full_name"
-                                           id="input_full_name"
+                                           :name="'full_name_' + i"
+                                           :id="'input_full_name_' + i"
                                            v-model="field.value.full_name"
                                            @input="validateUserName(i)"
                                            @animationstart="checkAutofill"
@@ -325,7 +326,7 @@
 
                         </li>
 
-                        <li v-if="(field.type === 'address' || field.type === 'address_v2') && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, { 'q_item--address_mod': field.type === 'address', 'q_item--address_v2_mod': field.type === 'address_v2', show: field.show, complete: field.complete} ]">
+                        <li v-if="(field.type === 'address' || field.type === 'address_v2') && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, { 'q_item--address_mod': field.type === 'address', 'q_item--address_v2_mod': field.type === 'address_v2', show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item_in">
@@ -386,7 +387,7 @@
                             </div>
                         </li>
 
-                        <li v-if="field.type === 'size' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--size_mod', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'size' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--size_mod', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
                             <FormKit
                                 v-model="field.value"
@@ -399,7 +400,7 @@
                             />
                         </li>
 
-                        <li v-if="field.type === 'size_two' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--size_two_mod', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'size_two' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--size_two_mod', {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item__in">
@@ -435,7 +436,7 @@
                         </li>
 
 
-                        <li v-if="['text', 'number', 'email'].includes(field.type) && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--text_one', 'q_item--field_type__'+field.type, {show: field.show, complete: field.complete} ]">
+                        <li v-if="['text', 'number', 'email'].includes(field.type) && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--text_one', 'q_item--field_type__'+field.type, {show: field.show, complete: field.complete} ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="formkit-outer" data-family="text" data-type="number" data-complete="true">
@@ -469,20 +470,21 @@
                         </li>
 
                     </template>
+                    </template>
                 </template>
 
-                <li :class="['button_next_tab', { done: !isTabs }]" ref="btnNextTab_1" v-show="tab.active === 0 && tab.complete[0]">
+                <li :class="['button_next_tab', { done: !isTabs }]" v-show="tab.active === 0 && tab.complete[0]">
                     <button type="button" @click="goTab(1, true)">
                         <span v-if="isTabs">Next Step</span>
                         <span v-if="!isTabs">Send Request</span>
                     </button>
                 </li>
 
-                <li :class="['button_next_tab']" ref="btnNextTab_2" v-show="isTabs && tab.active === 1 && tab.complete[0] && tab.complete[1]">
+                <li :class="['button_next_tab']" v-show="isTabs && tab.active === 1 && tab.complete[0] && tab.complete[1]">
                     <button type="button" @click="goTab(2, true)">Continue to Final Step</button>
                 </li>
 
-                <li :class="['button_next_tab', { done: isTabs }]" ref="btnNextTab_3" v-show="isTabs && tab.active === 2 && tab.complete[0] && tab.complete[1] && tab.complete[2]">
+                <li :class="['button_next_tab', { done: isTabs }]" v-show="isTabs && tab.active === 2 && tab.complete[0] && tab.complete[1] && tab.complete[2]">
                     <button type="button" @click="goTab(3, true)">Get my good quotes</button>
                 </li>
 
@@ -519,12 +521,12 @@ export default {
             questions: this.qs.map((q, i) => { q.id = i; return q }),
             tab: {active: 0, complete: [0, 0, 0, 0], available: [0, 0, 0, 0]},
             nav: { auto: ['Vehicles', 'Drivers', 'Final Details', 'Quotes'], home: ['Home', 'Owner', 'Final Details', 'Quotes'] },
-            tabs: { auto: [13, 24, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
-            userNameObj: '',
-            auto_make: '',
-            company_name: '',
+            tabs: { auto: [15, 36, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
+
             autofilled: false,
             isSecondVehicle: false,
+            isSecondDriver: false,
+            incidentsRepeatMap: {}
         }
     },
     computed: {
@@ -544,13 +546,20 @@ export default {
             return [`form--${this.form}`]
         },
         autoMake() {
-            const index = this.questions.findIndex(q => q.type === 'select_auto')
-            const autoQ = this.questions[index]
-            if (autoQ) {
-                return autoQ.value.auto_make
-            } else {
-                return undefined
-            }
+            const auto = this.questions.find(q => q.key === 'select_auto')
+            return auto?.value
+        },
+        autoMake2() {
+            const auto2 = this.questions.find(q => q.key === 'select_auto2')
+            return auto2?.value
+        },
+        userName() {
+            const user = this.questions.find(q => q.type === 'user_name')
+            return user?.value
+        },
+        companyName() {
+            const companyName = this.questions.find(q => q.key === 'select_insured_company')
+            return companyName?.value
         },
         progress() {
             return this.questions.filter(q => q.complete).length * 100 / this.questions.length
@@ -582,12 +591,17 @@ export default {
             return { active: this.tab.active === tab, complete: !!this.tab.complete[tab], available: !!this.tab.available[tab] }
         },
         replaceTitle(title) {
+
             if (title.includes('%%auto_make%%')) {
-                return title.replace('%%auto_make%%', this.autoMake)
+                return title.replace('%%auto_make%%', `${this.autoMake.auto_make} ${this.autoMake.auto_model}`)
+            }
+
+            if (title.includes('%%second_auto_make%%')) {
+                return title.replace('%%second_auto_make%%', `${this.autoMake2.auto_make} ${this.autoMake2.auto_model}`)
             }
 
             if (title.includes('%%company_name%%')) {
-                return title.replace('%%company_name%%', this.company_name)
+                return title.replace('%%company_name%%', this.companyName)
             }
 
             return title
@@ -664,26 +678,35 @@ export default {
         },
 
         /** Validate Field */
+        validate({ name, value, i, event }) {
+            const question = this.questions[i]
+
+            if (question.type === 'select') {
+                this.validateSelect(value, i)
+            }
+            if (question.type === 'radio') {
+                this.validateRadio(i)
+            }
+            if (question.type === 'date') {
+                this.validateDate(name, i, event)
+            }
+
+            setTimeout(() => {
+                this.incidentsRepeat(i)
+                this.managerTabs()
+                this.scrollController(i)
+            }, 0)
+        },
         validateSelectAuto(key, value, i) {
             const q = this.questions[i]
 
             q.value[key] = value
             q.complete = !!(q.value.auto_year && q.value.auto_make && q.value.auto_model)
-
-            if (key === 'auto_make') {
-                this.auto_make = value
-            }
         },
         validateSelect(value, i) {
             const question = this.questions[i]
             question.value = value
             question.complete = !!value
-
-            if (question.key === 'select_insured_company') {
-                this.company_name = value
-            }
-
-            this.scrollController(i)
         },
         validateRadioAndSelect(value, type, i) {
 
@@ -716,7 +739,11 @@ export default {
             setTimeout(() => {
                 if (question.key === 'add_second_vehicle') {
                     self.isSecondVehicle = ('yes' === question.value?.toLowerCase())
-                    this.managerTabs()
+                }
+                if (question.key === 'add_second_driver') {
+                    const isSecondDriver = ('yes' === question.value?.toLowerCase())
+
+                    self.isSecondDriver = isSecondDriver
                 }
 
                 if (question.key === 'is_insured') {
@@ -732,20 +759,32 @@ export default {
                             }
                         }
                     })
-                    this.managerTabs()
                 }
+
+                // if (['any_incidents', 'any_incidents2'].includes(question.key)) {
+                //
+                //     if (question.value === 'Yes') {
+                //         self.questions.splice(i + 1, 0,
+                //             {
+                //                 title: "Type of incident",
+                //                 value: '',
+                //                 options: ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension'],
+                //                 type: 'radio',
+                //                 active: 1,
+                //                 parent: 'any_incidents',
+                //             },
+                //         )
+                //     }
+                //
+                //     console.log(this.questions)
+                // }
+
+                question.complete = !!question.value
+
             }, 0)
-
-            question.complete = !!question.value
-
-            this.scrollController(i)
         },
-        validateDate(field, i, event) {
+        validateDate(name, i, event) {
             const question = this.questions[i]
-
-            if (question.type === 'user_birth') {
-                this.scrollController(i)
-            }
 
             if (question.optional) {
                 question.value.error.show = false
@@ -754,10 +793,6 @@ export default {
                 return
             }
 
-            const htmlElem = this.$refs['qs' + i][0]
-            const fMonth = htmlElem.querySelector('input[name="mm"]')
-            const fDay = htmlElem.querySelector('input[name="dd"]')
-            const fYear = htmlElem.querySelector('input[name="yyyy"]')
             const getMaxDate = (month, year) => {
                 if (month === 2) {
                     return year ? moment(`${year}-02`, 'YYYY-MM').daysInMonth() : 29
@@ -767,9 +802,9 @@ export default {
             }
 
             setTimeout(() => {
-                if (field === 'm' || field === 'd') {
+                if (name === 'm' || name === 'd') {
                     let value = Math.abs(event.target.value.trim().replace(/\D/g, '').replace(/^0+/, '').slice(0, 2))
-                    const maxValue = field === 'm' ? 12 : getMaxDate(+question.value.mm, +question.value.yyyy)
+                    const maxValue = name === 'm' ? 12 : getMaxDate(+question.value.mm, +question.value.yyyy)
 
                     if (value > maxValue) {
                         value = +(('' + value).charAt(0))
@@ -778,20 +813,26 @@ export default {
                         value = (('' + value).padStart(2, '0'))
                     }
 
-                    question.value[field === 'm' ? 'mm' : 'dd'] = value
+                    question.value[name === 'm' ? 'mm' : 'dd'] = value
 
                     if (value.length === 2) {
+                        const htmlElem = this.$refs['qs' + i][0]
+                        const fDay = htmlElem.querySelector('input[name*="dd"]')
+                        const fYear = htmlElem.querySelector('input[name*="yyyy"]')
+
                         setTimeout(() => {
-                            if (field === 'm') {
-                                fDay.focus(); fDay.select()
+                            if (name === 'm') {
+                                fDay.focus()
+                                fDay.select()
                             } else {
-                                fYear.focus(); fYear.select()
+                                fYear.focus()
+                                fYear.select()
                             }
-                        }, 1000)
+                        }, 300)
                     }
                 }
 
-                if (field === 'y') {
+                if (name === 'y') {
                     let value = Math.abs(event.target.value.trim().replace(/\D/g, '').replace(/^0+/, '').slice(0, 4))
                     const minValue = 1925
                     const maxValue = moment().year()
@@ -807,10 +848,13 @@ export default {
                 }
 
 
+                // Перевірка на вік, показ повідомлень
+
                 setTimeout(() => {
-                    const minAge = question.minAge ? question.minAge : 18
+                    const min = question.min ? question.min : 18
+                    const max = question.max ? question.max : 0
                     const { mm, dd, yyyy } = question.value
-                    const isAge = this.validateAge( +mm, +dd, +yyyy, minAge )
+                    const isAge = this.validateAge( +mm, +dd, +yyyy, min, max )
                     let errorShow = false
 
                     if (isAge === 1) {
@@ -818,8 +862,10 @@ export default {
                         question.show = true
                         question.complete = true
                     } else {
+                        question.complete = false
+
                         if (isAge === 0) {
-                            question.value.error.text = 'Driver Must be at least '+ minAge +' years old.'
+                            question.value.error.text = 'Driver Must be at least '+ min +' years old.'
                             question.value.error.show = true
                         } else {
                             if (yyyy.length === 4) {
@@ -829,10 +875,10 @@ export default {
                         }
                     }
 
-                }, 800)
+                }, 300)
             }, 300)
         },
-        validateAge(month, day, year, minAge = 18) {
+        validateAge(month, day, year, min = 18, max = 0 ) {
             if ([month, day, year].includes(undefined)) {
                 return -1
             }
@@ -849,8 +895,8 @@ export default {
             // Отримати поточну дату
             const currentDate = moment()
 
-            // Відняти minAge роки від поточної дати
-            const lastYearDate = currentDate.subtract( minAge, 'years')
+            // Відняти min роки від поточної дати
+            const lastYearDate = currentDate.subtract( min, 'years')
 
             let inputDate = null
 
@@ -872,9 +918,9 @@ export default {
             }
         },
         validateUserName(i) {
-            const question = this.questions[i]
 
             setTimeout(() => {
+                const question = this.questions[i]
                 const { full_name, last_name } = question.value
                 question.value.full_name = full_name[0] ? full_name[0].toUpperCase() + full_name.substring(1) : ''
                 question.value.last_name = last_name[0] ? last_name[0].toUpperCase() + last_name.substring(1) : ''
@@ -884,11 +930,11 @@ export default {
                 } else {
                     question.complete = !!full_name && !!last_name
                     question.onInput = true
-                    this.userNameObj = question.value
                 }
+
+                this.scrollController(i)
             }, 300)
 
-            this.scrollController(i)
         },
         validateAddress(name, i, value) {
             const self = this
@@ -1004,6 +1050,102 @@ export default {
             }
         },
 
+        /** Incidents Repeat */
+        incidentsRepeat(i) {
+            const self = this
+            const question = this.questions[i]
+            // const key = `${question.key}-${ i + 1 }-${this.incidentsRepeatMap[question.key].length}`
+
+            setTimeout(() => {
+
+                if (['any_incidents', 'any_incidents2'].includes(question.key)) {
+                    self.incidentsRepeatMap[question.key] = []
+                    const incidentsRepeatMap = self.incidentsRepeatMap[question.key]
+
+                    if (question.value === 'Yes') {
+                        const typeIncident = {
+                            title: "Type of incident",
+                            value: '',
+                            options: ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension'],
+                            type: 'radio',
+                            parent: question.key + '-' + incidentsRepeatMap.length,
+                        }
+
+                        self.questions.splice(i + 1, 0, typeIncident)
+                        self.tabs[self.form][1] += 1
+                        incidentsRepeatMap.push(i + 1)
+
+                    } else {
+
+                        const len = incidentsRepeatMap.length
+                        for (let j = 0; j < len; j++) {
+                            self.questions.splice(incidentsRepeatMap.pop(), 1)
+                            self.tabs[self.form][1] -= 1
+                        }
+                    }
+                }
+
+
+                let parent, key
+                const parentKey = question.parent?.split('-')
+                if (parentKey) {
+                    parent = parentKey[0]
+                    key = parentKey[1]
+                }
+
+
+                if (question.parent && ['any_incidents', 'any_incidents2'].includes(parent)) {
+                    const incidentsRepeatMap = self.incidentsRepeatMap[parent]
+
+                    if (key === '0') {
+                        if (question.options.includes(question.value)) {
+                            const dateIncident = {
+                                title: `Date of ${question.value}`,
+                                value: {
+                                    mm: '', dd: '', yyyy: '',
+                                    error: { text: 'Date must be within last 3 years', show: false }
+                                },
+                                min: 0, max: 3, type: 'date',
+                                parent: parent + '-' + incidentsRepeatMap.length,
+                            }
+                            self.questions.splice(i + 1, 0, dateIncident)
+                            self.tabs[self.form][1] += 1
+                            incidentsRepeatMap.push(i + 1)
+                        }
+                    }
+
+                    console.log(key, question.value.dd, question.value.mm, question.value.yyyy)
+
+                    if (key === '1' && question.complete) {
+                        const q = self.questions[incidentsRepeatMap[incidentsRepeatMap.length - 2]]
+                        const arr = ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension']
+                        if ('ticket' === q.value.toLowerCase()) {
+                            const dateIncident = {
+                                title: `Type of ${q.value}`,
+                                value: '',
+                                options: [
+                                    'Select ...',
+                                    'Speeding less than 10 mph over',
+                                    'Speeding more than 10 mph over',
+                                    'Speeding more than 20 mph over',
+                                    'Drug possession',
+                                    'Minor in possession',
+                                    'Open Container',
+                                    'DUI/DWI'
+                                ],
+                                type: 'select',
+                                parent: parent + '-' + incidentsRepeatMap.length,
+                            }
+                            self.questions.splice(i + 1, 0, dateIncident)
+                            self.tabs[self.form][1] += 1
+                            incidentsRepeatMap.push(i + 1)
+                        }
+                    }
+                }
+
+            }, 300)
+        },
+
         /** Set options motorcycle models  */
         setMotorcycleModels(i) {
             const fieldSelectMotorcycleMake = this.questions[i]
@@ -1041,8 +1183,8 @@ export default {
                     if (typeof q.value === 'object' && !Array.isArray(q.value) && q.value !== null) {
 
                         // Birth
-                        if (q.type === 'user_birth') {
-                            complete = !!q.value.dd && !!q.value.mm && !!q.value.yyyy
+                        if (q.type === 'date') {
+                            complete = q.complete === undefined ? !!q.value.dd && !!q.value.mm && !!q.value.yyyy : q.complete
                         }
 
                         // Address
@@ -1080,7 +1222,6 @@ export default {
 
                     // Value is String
                     else {
-                        console.log(q.type, q.value, q.complete)
                         complete = !!q.value
                     }
                 }
@@ -1119,6 +1260,9 @@ export default {
                 for (let j = start; j < end; j++) {
 
                     if (!this.isSecondVehicle && this.questions[j].group === 'vehicle2') {
+                        continue
+                    }
+                    if (!this.isSecondDriver && this.questions[j].group === 'driver2') {
                         continue
                     }
 
@@ -1165,6 +1309,13 @@ export default {
 
                         if (next?.group === 'vehicle2') {
                             next = this.questions.find((e, n) => n > i && e.group !== 'vehicle2')
+                        }
+                    }
+                    if (!this.isSecondDriver) {
+                        if (q.group === 'driver2') continue
+
+                        if (next?.group === 'driver2') {
+                            next = this.questions.find((e, n) => n > i && e.group !== 'driver2')
                         }
                     }
 
@@ -1282,8 +1433,8 @@ export default {
                         value: q.value,
                     }
                 }),
-                user_name: this.userNameObj,
-                auto_make: this.autoMake,
+                user_name: this.userName,
+                auto_make: `${this.autoMake.auto_make} ${this.autoMake.auto_model}`,
             }
 
             // Create Html Content for PDF File
@@ -1299,7 +1450,7 @@ export default {
                     case 'select_auto':
                         value = `${qsn.value.auto_year}, ${qsn.value.auto_make}, ${qsn.value.auto_model}`
                         break
-                    case 'user_birth':
+                    case 'date':
                         value = `${qsn.value.dd}-${qsn.value.mm}-${qsn.value.yyyy}`
                         break
                     case 'user_name':
@@ -1345,7 +1496,23 @@ export default {
         this.moveElement()
         window.scrollTo(0, 0)
         this.isSecondVehicle = this.questions.find(q => q.key === 'add_second_vehicle')?.value === 'Yes'
+        this.isSecondDriver  = this.questions.find(q => q.key === 'add_second_driver')?.value === 'Yes'
 
+        // Показати / приховати при умові активності парента
+        this.questions.forEach(qp => {
+            if (qp.key) {
+                const key = qp.key
+                const value = typeof qp.value === 'string' ? qp.value?.toLowerCase() : null
+
+                if (['yes', 'no'].includes(value)) {
+                    this.questions.forEach(qc => {
+                        if (qc.parent === key) {
+                            qc.active = 'yes' === value ? 1 : 0
+                        }
+                    })
+                }
+            }
+        })
     },
     watch: {
         questions: {

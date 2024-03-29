@@ -81,6 +81,10 @@
   padding: 0 1.6rem;
   cursor: pointer;
   user-select: none;
+
+  &:nth-child(1) {
+    display: none;
+  }
 }
 
 .custom-select .items .item:not(.selected_value):hover {

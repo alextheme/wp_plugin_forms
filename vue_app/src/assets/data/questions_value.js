@@ -3,60 +3,105 @@ import questions from './questions.js'
 const q = {...questions}
 
 const auto = () => {
-    q.auto[0].value.auto_year = 1999
-    q.auto[0].value.auto_make = 'Audi'
-    q.auto[0].value.auto_model = 'A3'
 
-    q.auto[1].value = 'Pleasure'
-    q.auto[2].value = 20
-    q.auto[3].value = 'Finance'
-    q.auto[4].value = 'Full Coverage'
-    q.auto[5].value = '$1000'
-    q.auto[6].value = '$1000'
-    q.auto[7].value = 'Yes'
+    [
+        [   // Let's get started, what car do you drive?
+            { k:'auto_year', v: '1999' },
+            { k:'auto_make', v:'Audi' },
+            { k:'auto_model', v:'A3' }
+        ],
+        'Pleasure',         // What do you use your ... for? Pleasure
+        '20',               // How many miles per day do you drive? 20
+        'Finance',          // Do you own your ...? Finance
+        'Full Coverage',    // Would You Like Full Coverage or Liability Only? Full Coverage
+        '$1000',            // Select Deductible for Collision? $1000
+        '$1500',            // Select Deductible for Comprehensive? $1500
+        'Yes',              // Want to add a second vehicle? Yes
 
-    q.auto[8].value.auto_year = '1999'
-    q.auto[8].value.auto_make = 'Audi'
-    q.auto[8].value.auto_model = 'A3'
+        [   // Second Vehicle: What car do you drive?
+            { k:'auto_year', v: '2014' },
+            { k:'auto_make', v:'BMV' },
+            { k:'auto_model', v:'328d' }
+        ],
 
-    q.auto[9].value = 'Pleasure'
-    q.auto[10].value = 20
-    q.auto[11].value = 'Finance'
-    q.auto[12].value = 'Full Coverage'
+        'Uber / Lyft',      // Second Vehicle: What do you use your BMV 328d for? Uber / Lyft
+        '30+',              // Second Vehicle: How many miles per day do you drive? 30+
+        'Lease',            // Second Vehicle: Do you own your BMV 328d? Lease
+        'Liability Only',   // Second Vehicle: Would You Like Full Coverage or Liability Only? Liability Only
+        '$1000',            // Second Vehicle: Select Deductible for Collision $1000
+        '$1500',            // Second Vehicle: Select Deductible for Comprehensive $1500
 
-    q.auto[13].value.full_name = 'Oleksandr'
-    q.auto[13].value.last_name = 'Borymskyi'
+        // Next Tab
 
-    q.auto[14].value.mm = '05'
-    q.auto[14].value.dd = '25'
-    q.auto[14].value.yyyy = '2000'
+        [   // What is your name?
+            { k:'full_name', v: 'Oleksandr' },
+            { k:'last_name', v:'Borymskyi' }
+        ],
 
-    q.auto[15].value = 'Male'
-    q.auto[16].value = 'Yes'
-    q.auto[17].value = 'Some College'
+        [   // What is your date of birth?
+            { k:'mm', v: '05' },
+            { k:'dd', v:'25' },
+            { k:'yyyy', v:'2000' }
+        ],
 
-    q.auto[18].value = 'Architect'
-    q.auto[19].value = 'Good (600-700)'
-    q.auto[20].value = 'Permit'
-    q.auto[21].value = 'No'
-    q.auto[22].value = 'No'
-    q.auto[23].value = 'Yes'
+        'Male',             // What is your gender? Male
+        'Yes',              // Are you married? Yes
+        'Some College',     // What is your education level? Some College
+        'Architect',        // What is your occupation? Architect
+        'Good (600-700)',   // What is your credit score? Good (600-700)
+        'Permit',           // What is the status of your driver's license? Permit
+        'Yes',              // Do you require SR-22? Yes
+        // 'No',              // Any incidents in the last 3 years? Yes
 
-    q.auto[24].value = 'Yes'
-    q.auto[25].value = 'Basic'
-    q.auto[26].value = 'No'
-    q.auto[27].value = 'Own'
-    q.auto[28].value = 'Townhome'
+        // .................... REPEATER ....................
 
-    q.auto[29].value.address = 'Shevchenko, 45, Berdychiv'
-    q.auto[29].value.unit = '1234'
-    q.auto[29].value.apt = ''
-    q.auto[29].value.state = 'MN'
-    q.auto[29].value.zip = '4321'
+        // 'Yes',              // Want to add a second driver?
+        //
+        // [   // Second Driver: What is your name?
+        //     { k:'full_name', v: 'Maria' },
+        //     { k:'last_name', v:'Leik' }
+        // ],
+        //
+        // [   // Second Driver: What is your date of birth?
+        //     { k:'mm', v: '01' },
+        //     { k:'dd', v:'01' },
+        //     { k:'yyyy', v:'1928' }
+        // ],
+        //
+        // 'Female',           // Second Driver: What is your gender? Female
+        // 'Yes',              // Second Driver: Are you married? Yes
+        // 'Doctorate Degree', // Second Driver: What is your education level? Doctorate Degree
+        // 'Architect',        // Second Driver: What is your occupation? Architect
+        // 'Poor (300-400)',   // Second Driver: What is your credit score? Poor (300-400)
+        // 'Suspended',        // Second Driver: What is the status of your driver's license? Suspended
+        // 'No',               // Second Driver: Do you require SR-22? No
+        // 'Yes',              // Second Driver: Any incidents in the last 3 years? Yes
+        //
+        // // .................... REPEATER ....................
+        //
+        // 'Yes',              // Do you currently have car insurance? Yes
+        // 'Basic',            // How much coverage do you need? Basic
+        // 'No',               // Have you or anyone in your familyserved in the military? No
+        // 'Own',              // Do you own or rent your home? Own
+        // 'Townhome',         // What type of home do you live in? Townhome
+        //
+        // [   // What is your address?
+        //     { k: 'address', v: 'Shevchenko, 45, Berdychiv' },
+        //     { k: 'unit',    v:'1234' },
+        //     { k: 'apt',     v:'' },
+        //     { k: 'state',   v:'MN' },
+        //     { k: 'zip',     v:'4321' },
+        // ],
+        //
+        // 'favorstreet21@gmail.com',  // What is Your Email? favorstreet21@gmail.com
+        // '1234567890',               // What is Your Phone Number? 1234567890
 
-    q.auto[30].value = 'favorstreet21@gmail.com'
-    q.auto[31].value = '1234567890'
-
+    ].forEach((elem, i) => {
+        if (typeof elem === 'string')
+            q.auto[i].value = elem
+        else
+            elem.forEach(e => q.auto[i].value[e.k] = e.v)
+    })
 }
 const home = () => {
     q.home[0].value = 'Townhome'
@@ -67,19 +112,19 @@ const home = () => {
     q.home[1].value.state = 'MN'
     q.home[1].value.zip = '4321'
 
-    q.home[2].value = 2000
+    // q.home[2].value = 2000
     q.home[3].value = 3
     q.home[4].value = 3
     q.home[5].value = 4
     q.home[6].value = 6
-    q.home[7].value = 2005
+    // q.home[7].value = 2005
 
     q.home[8].value.full_name = 'Bob'
     q.home[8].value.last_name = 'Grid'
 
-    q.home[9].value.dd = 13
-    q.home[9].value.mm = 8
-    q.home[9].value.yyyy = 1996
+    // q.home[9].value.dd = 13
+    // q.home[9].value.mm = 8
+    // q.home[9].value.yyyy = 1996
 
     q.home[10].value = 'Female'
     q.home[11].value = 'Yes'
@@ -193,7 +238,7 @@ const commercial = () => {
     q.commercial[14].value = '123456789'
 }
 const bike = () => {
-    q.bike[0].value = 2000
+    // q.bike[0].value = 2000
     q.bike[1].value = 'Kawasaki'
     q.bike[2].value = 'BJ'
     q.bike[3].value = 'Yes'

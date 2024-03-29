@@ -41,8 +41,8 @@ export const whatIsYourDateOfBirth = {
             show: false
         }
     },
-    minAge: 18,
-    type: 'user_birth',
+    min: 18,
+    type: 'date',
 }
 
 export const whatIsYourName =  {
@@ -96,7 +96,7 @@ export const whatIsYourOccupation = {
     title: "What is your occupation?",
     value: '',
     options: [
-        '',
+        'Select Occupation',
         'Administrative Clerical',
         'Architect',
         'Business Owner',

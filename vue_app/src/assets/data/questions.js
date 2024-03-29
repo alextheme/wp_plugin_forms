@@ -99,7 +99,7 @@ const formData = {
                     show: false
                 }
             },
-            type: 'user_birth',
+            type: 'date',
         },
         {
             title: "TEST... Address1",
@@ -292,6 +292,22 @@ const formData = {
             type: 'radio',
             group: 'vehicle2',
         },
+        {
+            title: 'Second Vehicle: Select Deductible for Collision',
+            descr: 'Amount you pay in case of an accident.',
+            value: '',
+            options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: Select Deductible for Comprehensive',
+            descr: 'Amount you pay in case of theft, vandalism etc.',
+            value: '',
+            options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
         // Second Vehicle
 
 
@@ -322,14 +338,157 @@ const formData = {
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
+            key: 'any_incidents',
         },
+
+        /**  Repeater */
+        // {
+        //     title: "Type of incident",
+        //     value: '',
+        //     options: ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension'],
+        //     type: 'radio',
+        //     active: 0,
+        //     parent: 'any_incidents',
+        // },
+        // Repeater
+
+
         {
             title: "Want to add a second driver?",
             descr: 'You can save up to 25% by having multiple drivers on the same policy',
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
+            key: 'add_second_driver',
         },
+
+        /** Second Driver */
+        {
+            title: "Second Driver: What is your name?",
+            descr: 'The better we know you, the more accurate quotes we can provide',
+            value: {
+                full_name: '',
+                last_name: ''
+            },
+            type: 'user_name',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: What is your date of birth?",
+            value: {
+                dd: '',
+                mm: '',
+                yyyy: '',
+                error: {
+                    text: 'Driver Must be at least 18 years old',
+                    show: false
+                }
+            },
+            minAge: 18,
+            type: 'date',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: What is your gender?",
+            value: '',
+            options: ['Male', 'Female', 'Non-binary'],
+            type: 'radio',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: Are you married?",
+            value: '',
+            options: ['Yes', 'No'],
+            type: 'radio',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: What is your education level?",
+            value: '',
+            options: ['Less than High School', 'Some or No High School', 'High School Diploma', 'Some College', 'Associate Degree', 'Bachelors Degree', 'Masters Degree', 'Doctorate Degree'],
+            type: 'radio',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: What is your occupation?",
+            value: '',
+            options: [
+                'Select Occupation',
+                'Administrative Clerical',
+                'Architect',
+                'Business Owner',
+                'Certified Public Accountant',
+                'Clergy',
+                'Construction Trades',
+                'Consultant',
+                'Dentist',
+                'Disabled',
+                'Engineer',
+                'Financial Services',
+                'Health Care',
+                'Homemaker',
+                'Human Relations',
+                'Lawyer',
+                'Marketing',
+                'Manager Supervisor',
+                'Military Enlisted',
+                'Minor Not Applicable',
+                'Other / Not Listed',
+                'Other Non Technical',
+                'Other Technical',
+                'Physician',
+                'Professional Salaried',
+                'Professor',
+                'Retail',
+                'Retired',
+                'Sales Inside',
+                'Sales Outside',
+                'School Teacher',
+                'Scientist',
+                'Self Employed',
+                'Skilled Semi Skilled',
+                'Transportantion / Logistics',
+                'Student',
+                'Unemployed'],
+            type: 'select',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: What is your credit score?",
+            value: '',
+            options: ['Excellent (700-850)', 'Good (600-700)', 'Average (400-600)', 'Poor (300-400)'],
+            type: 'radio',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: What is the status of your driver's license?",
+            value: '',
+            options: ['Active', 'Permit', 'Suspended', 'Foreign', 'Expired'],
+            type: 'radio',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: Do you require SR-22?",
+            descr: 'SR-22 is a certificate issued by the state that is sometimes required for drivers that have a DUI or multiple incidents.',
+            value: '',
+            options: ['Yes', 'No'],
+            type: 'radio',
+            group: 'driver2'
+        },
+        {
+            title: "Second Driver: Any incidents in the last 3 years?",
+            descr: 'Such as tickets, accidents, claims, DUI, or license suspension',
+            value: '',
+            options: ['Yes', 'No'],
+            type: 'radio',
+            group: 'driver2',
+            key: 'any_incidents2',
+        },
+
+        /**  Repeater */
+        // Repeater
+
+        // Second Driver
 
 
         // tab 3
