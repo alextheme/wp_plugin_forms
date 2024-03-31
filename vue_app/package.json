@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite build --mode development",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve": "vite serve"
   },
   "dependencies": {
     "@formkit/vue": "^1.5.9",

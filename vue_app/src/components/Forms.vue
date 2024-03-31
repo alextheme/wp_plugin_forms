@@ -142,7 +142,7 @@
                             </div>
                         </li>
 
-                        <li v-if="field.type === 'select' && tabPosition(i) === tab.active && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--select_one', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'select' && tabPosition(i) === tab.active && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--select_one', {show: field.show, complete: field.complete, ['color-' + (field.repeatGroup ? field.repeatGroup.split('-')[1] : '')]: field.repeatGroup && field.repeatGroup.split('-')[0] === 'incidents' } ]">
                             <question-header :title="field.title" :descr="field.descr" />
                             <select-dropdown
                                 :default="field.value"
@@ -151,7 +151,7 @@
                             />
                         </li>
 
-                        <li v-if="field.type === 'radio' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--radio', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'radio' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--radio', {show: field.show, complete: field.complete, ['color-' + (field.repeatGroup ? field.repeatGroup.split('-')[1] : '')]: field.repeatGroup && field.repeatGroup.split('-')[0] === 'incidents' } ]">
                             <question-header :title="replaceTitle(field.title)" :descr="field.descr" />
 
                             <ul v-if="field.descrList?.length" class="radio__descr_list">
@@ -226,7 +226,7 @@
                         </li>
 
 
-                        <li v-if="field.type === 'date' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--date_mod', {show: field.show, complete: field.complete} ]">
+                        <li v-if="field.type === 'date' && tabPosition(i) === tab.active  && field.active !== 0" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--date_mod', {show: field.show, complete: field.complete, ['color-' + (field.repeatGroup ? field.repeatGroup.split('-')[1] : '')]: field.repeatGroup && field.repeatGroup.split('-')[0] === 'incidents' } ]">
                             <question-header :title="field.title" :descr="field.descr" />
 
                             <div class="q_item_in">
@@ -509,6 +509,7 @@ import SelectDropdown from './parts/SelectDropdown.vue'
 import IconOk from './parts/IconOk.vue'
 import axios from 'axios'
 import {motorcycleDatabase} from '../assets/data/moto.js'
+import { lastIncidents, typeIncidents, dateIncident, typeIncident, accident, damage } from "../assets/data/questions-repeat.js";
 
 export default {
     components: { Done, PrivacyPolicy, SelectDropdown, QuestionHeader, IconOk },
@@ -526,7 +527,7 @@ export default {
             autofilled: false,
             isSecondVehicle: false,
             isSecondDriver: false,
-            incidentsRepeatMap: {}
+            repeat: { map: [] }
         }
     },
     computed: {
@@ -760,24 +761,6 @@ export default {
                         }
                     })
                 }
-
-                // if (['any_incidents', 'any_incidents2'].includes(question.key)) {
-                //
-                //     if (question.value === 'Yes') {
-                //         self.questions.splice(i + 1, 0,
-                //             {
-                //                 title: "Type of incident",
-                //                 value: '',
-                //                 options: ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension'],
-                //                 type: 'radio',
-                //                 active: 1,
-                //                 parent: 'any_incidents',
-                //             },
-                //         )
-                //     }
-                //
-                //     console.log(this.questions)
-                // }
 
                 question.complete = !!question.value
 
@@ -1051,99 +1034,160 @@ export default {
         },
 
         /** Incidents Repeat */
+        getIndexRepeatGroup() {
+            return +this.repeat.map
+                .filter(o => o.indexInGroup === 0)
+                .sort((a, b) => a.repeatGroup.split('-')[1] - b.repeatGroup.split('-')[1])
+                .pop()?.repeatGroup.split('-')[1] + 1 || 0
+        },
+        createRepeatField({ repeatGroup, indexInGroup, typeIncident, startIndex, fn, other }) {
+            const newQuestion = fn({ repeatGroup, indexInGroup, typeIncident, other })
+            this.questions.splice(startIndex, 0, newQuestion)
+            this.repeat.map.push(newQuestion)
+            this.tabs[this.form][1] += 1
+        },
         incidentsRepeat(i) {
             const self = this
-            const question = this.questions[i]
-            // const key = `${question.key}-${ i + 1 }-${this.incidentsRepeatMap[question.key].length}`
+            const q = this.questions[i]
+            const groupNames = ['incidents', 'incidents2']
 
             setTimeout(() => {
 
-                if (['any_incidents', 'any_incidents2'].includes(question.key)) {
-                    self.incidentsRepeatMap[question.key] = []
-                    const incidentsRepeatMap = self.incidentsRepeatMap[question.key]
+                const repeatNamePrefix = q.repeatGroup?.split('-')?.[0]
 
-                    if (question.value === 'Yes') {
-                        const typeIncident = {
-                            title: "Type of incident",
-                            value: '',
-                            options: ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension'],
-                            type: 'radio',
-                            parent: question.key + '-' + incidentsRepeatMap.length,
+                if (groupNames.includes(repeatNamePrefix)) {
+                    const repeatGroup = q.repeatGroup
+                    const indexInGroup = q.indexInGroup
+
+
+                    /** IS INCIDENTS */
+                    if (indexInGroup === 0) {
+
+                        // якщо тільки початок циклу повторень.
+                        if (!self.repeat.map.filter(o => o.indexInGroup === 0).length) {
+                            self.repeat.map = [{...q}]
                         }
 
-                        self.questions.splice(i + 1, 0, typeIncident)
-                        self.tabs[self.form][1] += 1
-                        incidentsRepeatMap.push(i + 1)
+                        const repeatGroupElements = self.repeat.map.filter(e => e.repeatGroup === q.repeatGroup)
 
-                    } else {
+                        if (q.value === 'Yes') {
 
-                        const len = incidentsRepeatMap.length
-                        for (let j = 0; j < len; j++) {
-                            self.questions.splice(incidentsRepeatMap.pop(), 1)
-                            self.tabs[self.form][1] -= 1
-                        }
-                    }
-                }
+                            console.log(self.questions)
 
+                            if (repeatGroupElements.length === 1) {
 
-                let parent, key
-                const parentKey = question.parent?.split('-')
-                if (parentKey) {
-                    parent = parentKey[0]
-                    key = parentKey[1]
-                }
-
-
-                if (question.parent && ['any_incidents', 'any_incidents2'].includes(parent)) {
-                    const incidentsRepeatMap = self.incidentsRepeatMap[parent]
-
-                    if (key === '0') {
-                        if (question.options.includes(question.value)) {
-                            const dateIncident = {
-                                title: `Date of ${question.value}`,
-                                value: {
-                                    mm: '', dd: '', yyyy: '',
-                                    error: { text: 'Date must be within last 3 years', show: false }
-                                },
-                                min: 0, max: 3, type: 'date',
-                                parent: parent + '-' + incidentsRepeatMap.length,
+                                /* Add Type INCIDENTS == (Ticket, Accident, Claim, DUI, License Suspension) */
+                                // Додаємо перше питання вибір варіанта інцидента
+                                this.createRepeatField({
+                                    fn: typeIncidents,
+                                    repeatGroup,
+                                    indexInGroup: 1,
+                                    typeIncident: null,
+                                    startIndex: i + 1,
+                                })
                             }
-                            self.questions.splice(i + 1, 0, dateIncident)
-                            self.tabs[self.form][1] += 1
-                            incidentsRepeatMap.push(i + 1)
+
+                        } else {
+
+                            if (repeatGroupElements.length > 1) {
+
+                                const indexR = self.repeat.map.findIndex(elem => elem.repeatGroup === q.repeatGroup)
+                                self.repeat.map.splice(indexR, repeatGroupElements.length)
+                                self.tabs[self.form][1] -= repeatGroupElements.length
+
+                                const indexQ = self.questions.findIndex(elem => elem.repeatGroup && elem.repeatGroup.split('-')[0] === repeatNamePrefix)
+                                const oldQ = self.questions.filter(elem => elem.repeatGroup && elem.repeatGroup.split('-')[0] === repeatNamePrefix)
+                                self.questions.splice(indexQ, oldQ.length, ...self.repeat.map)
+
+                                // додати додаткове питання якщо не було зроблено вибір в першому
+                                // додаткове питання для наступного повтору додається після вибору відповіді в першому питанні
+                                const typeIncidentsQuestion = repeatGroupElements.find(q => q.indexInGroup === 1)
+                                if (!typeIncidentsQuestion.value) {
+                                    /* Add question new group - IS INCIDENTS == (Ticket, Accident, Claim, DUI, License Suspension) */
+                                    this.createRepeatField({
+                                        fn: lastIncidents,
+                                        repeatGroup: `${repeatNamePrefix}-${self.getIndexRepeatGroup()}`,
+                                        indexInGroup: 0,
+                                        startIndex: i,
+                                        other: true
+                                    })
+                                }
+                            }
                         }
                     }
 
-                    console.log(key, question.value.dd, question.value.mm, question.value.yyyy)
+                    /** Type INCIDENTS */
+                    if (indexInGroup === 1) {
 
-                    if (key === '1' && question.complete) {
-                        const q = self.questions[incidentsRepeatMap[incidentsRepeatMap.length - 2]]
-                        const arr = ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension']
-                        if ('ticket' === q.value.toLowerCase()) {
-                            const dateIncident = {
-                                title: `Type of ${q.value}`,
-                                value: '',
-                                options: [
-                                    'Select ...',
-                                    'Speeding less than 10 mph over',
-                                    'Speeding more than 10 mph over',
-                                    'Speeding more than 20 mph over',
-                                    'Drug possession',
-                                    'Minor in possession',
-                                    'Open Container',
-                                    'DUI/DWI'
-                                ],
-                                type: 'select',
-                                parent: parent + '-' + incidentsRepeatMap.length,
+                        // В залежності від вибору варіанта першого питання
+                        // додаємо наступні питання (всі + додаткове питання для наступного повтору)
+                        if (q.value) {
+
+                            const repeatGroupElements = self.repeat.map.filter(e => e.repeatGroup === q.repeatGroup)
+
+                            // Умова, щоб при повторному рендерингу (після видалення)
+                            // не додавались зайві питання
+                            if (repeatGroupElements.length === 2) {
+
+                                let offsetIndex = 0
+
+                                /* Add Date Incident Question */
+                                this.createRepeatField({
+                                    fn: dateIncident,
+                                    repeatGroup,
+                                    indexInGroup: 2,
+                                    typeIncident: q.value.toLowerCase(),
+                                    startIndex: i + ++offsetIndex,
+                                })
+
+
+                                if (q.value.toLowerCase() !== 'license suspension') {
+
+                                    /* Add Type incident Question */
+                                    this.createRepeatField({
+                                        fn: typeIncident,
+                                        repeatGroup,
+                                        indexInGroup: 3,
+                                        typeIncident: q.value.toLowerCase(),
+                                        startIndex: i + ++offsetIndex,
+                                    })
+
+
+                                    if (q.value.toLowerCase() === 'accident') {
+
+                                        /* Add Accident Question */
+                                        this.createRepeatField({
+                                            fn: accident,
+                                            repeatGroup,
+                                            indexInGroup: 4,
+                                            startIndex: i + ++offsetIndex,
+                                        })
+
+                                        /* Add Damage Question */
+                                        this.createRepeatField({
+                                            fn: damage,
+                                            repeatGroup,
+                                            indexInGroup: 5,
+                                            startIndex: i + ++offsetIndex,
+                                        })
+                                    }
+                                }
+
+                                // Додаткове питання для настопного повтору, циклу
+                                /* Add question new group - IS INCIDENTS == (Ticket, Accident, Claim, DUI, License Suspension) */
+                                this.createRepeatField({
+                                    fn: lastIncidents,
+                                    repeatGroup: `${repeatNamePrefix}-${self.getIndexRepeatGroup()}`,
+                                    indexInGroup: 0,
+                                    startIndex: i + ++offsetIndex,
+                                    other: true
+                                })
                             }
-                            self.questions.splice(i + 1, 0, dateIncident)
-                            self.tabs[self.form][1] += 1
-                            incidentsRepeatMap.push(i + 1)
                         }
                     }
                 }
 
-            }, 300)
+            }, 0)
         },
 
         /** Set options motorcycle models  */
@@ -1403,6 +1447,7 @@ export default {
             });
         },
         scrollController(id) {
+            return null
             const is_insured = this.questions.find(q => q.key === 'is_insured')
             if (is_insured && is_insured.value.toLowerCase() === 'yes' && id === is_insured.id + 1) {
                 id = is_insured.id

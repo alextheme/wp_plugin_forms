@@ -6,7 +6,7 @@ import {
     whatIsYourName, whatIsYourOccupation, whatIsYourPhoneNumber, whatTypeOfHomeDoYouLiveIn
 } from "./questions-export.js";
 
-import motorcycle from './moto.js'
+// import motorcycle from './moto.js'
 import { motorcycleCheckbox, motorcycleDatabase } from './moto.js'
 
 // example validation rule
@@ -338,20 +338,11 @@ const formData = {
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
-            key: 'any_incidents',
+            repeatGroup: 'incidents-0',
+            indexInGroup: 0,
         },
 
-        /**  Repeater */
-        // {
-        //     title: "Type of incident",
-        //     value: '',
-        //     options: ['Ticket', 'Accident', 'Claim', 'DUI', 'License Suspension'],
-        //     type: 'radio',
-        //     active: 0,
-        //     parent: 'any_incidents',
-        // },
-        // Repeater
-
+        /**  Repeater */ // Repeater
 
         {
             title: "Want to add a second driver?",
@@ -361,6 +352,7 @@ const formData = {
             type: 'radio',
             key: 'add_second_driver',
         },
+
 
         /** Second Driver */
         {
@@ -482,11 +474,11 @@ const formData = {
             options: ['Yes', 'No'],
             type: 'radio',
             group: 'driver2',
-            key: 'any_incidents2',
+            repeatGroup: 'incidents2-0',
+            indexInGroup: 0
         },
 
-        /**  Repeater */
-        // Repeater
+        /**  Repeater */ // Repeater
 
         // Second Driver
 

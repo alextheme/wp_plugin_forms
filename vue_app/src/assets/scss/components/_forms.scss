@@ -214,7 +214,7 @@ body {
 
 .custom-select,
 .q_item {
-  display: none;
+  display: none; // TODO style
 
   position: relative;
 
@@ -755,6 +755,9 @@ body {
     }
   }
 
+  .formkit-label {
+    margin-bottom: 0;
+  }
 }
 
 
@@ -1086,3 +1089,33 @@ input[type=number] {
 .entry-header {
   display: none;
 }
+//.color {
+//  &-0,
+//  &-7 {
+//    background-color: #c76c6c;
+//  }
+//  &-1,
+//  &-8 {
+//    background-color: #ce9146;
+//  }
+//  &-2 ,
+//  &-9 {
+//    background-color: #edff4b;
+//  }
+//  &-3,
+//  &-10 {
+//    background-color: #4a9f13;
+//  }
+//  &-4,
+//  &-11 {
+//    background-color: #7fcaff;
+//  }
+//  &-5,
+//  &-12 {
+//    background-color: #1e38de;
+//  }
+//  &-6,
+//  &-13 {
+//    background-color: #cc1ede;
+//  }
+//}
