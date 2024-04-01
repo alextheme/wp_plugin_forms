@@ -834,11 +834,9 @@ export default {
                 // Перевірка на вік, показ повідомлень
 
                 setTimeout(() => {
-                    const min = question.min ? question.min : 18
-                    const max = question.max ? question.max : 0
                     const { mm, dd, yyyy } = question.value
+                    const { min, max } = question
                     const isAge = this.validateAge( +mm, +dd, +yyyy, min, max )
-                    let errorShow = false
 
                     if (isAge === 1) {
                         question.value.error.show = false
@@ -848,13 +846,7 @@ export default {
                         question.complete = false
 
                         if (isAge === 0) {
-                            question.value.error.text = 'Driver Must be at least '+ min +' years old.'
                             question.value.error.show = true
-                        } else {
-                            if (yyyy.length === 4) {
-                                question.value.error.text = 'Please enter a valid date.'
-                                question.value.error.show = true
-                            }
                         }
                     }
 
@@ -862,42 +854,30 @@ export default {
             }, 300)
         },
         validateAge(month, day, year, min = 18, max = 0 ) {
-            if ([month, day, year].includes(undefined)) {
-                return -1
-            }
-            if (String(year).length !== 4) {
-                return -1
-            }
+            if ([month, day, year].includes(undefined) || String(year).length !== 4) return -1
 
-
+            if (max !== 0 && max < min) max = 0
 
             // Перевірити валідність дати та кількість років
 
-            let dateString = [year, month, day].join('-')
+            const dateString = [year, month, day].join('-')
+            const dateFormat = 'YYYY-MM-DD'
 
-            // Отримати поточну дату
-            const currentDate = moment()
+            // Відняти роки від поточної дати
+            const minY = moment().subtract( min, 'years')
+            const maxY = moment().subtract( max, 'years')
 
-            // Відняти min роки від поточної дати
-            const lastYearDate = currentDate.subtract( min, 'years')
+            if (moment(dateString, dateFormat).isValid()) {
 
-            let inputDate = null
+                const isMinDate = moment(dateString, dateFormat).isSameOrBefore(minY)
+                const isMaxDate = max === 0
+                    ? moment(dateString, dateFormat).isSameOrBefore(maxY)
+                    : !moment(dateString, dateFormat).isSameOrBefore(maxY)
 
-            const timestamp = Date.parse(dateString)
-            if (isNaN(timestamp) === false) {
-                inputDate = new Date(timestamp)
-            }
-
-            if (inputDate) {
-
-                if (moment(inputDate).isSameOrBefore(lastYearDate)) {
-                    return 1
-                } else {
-                    return 0
-                }
+                return isMinDate && isMaxDate ? 1 : 0
 
             } else {
-                return -1
+                return -1 // invalid date
             }
         },
         validateUserName(i) {
@@ -1033,9 +1013,9 @@ export default {
             }
         },
 
-        /** Incidents Repeat */
+        /** Repeat (Incidents) */
         getIndexRepeatGroup() {
-            return +this.repeat.map
+            return +this.questions
                 .filter(o => o.indexInGroup === 0)
                 .sort((a, b) => a.repeatGroup.split('-')[1] - b.repeatGroup.split('-')[1])
                 .pop()?.repeatGroup.split('-')[1] + 1 || 0
@@ -1043,7 +1023,6 @@ export default {
         createRepeatField({ repeatGroup, indexInGroup, typeIncident, startIndex, fn, other }) {
             const newQuestion = fn({ repeatGroup, indexInGroup, typeIncident, other })
             this.questions.splice(startIndex, 0, newQuestion)
-            this.repeat.map.push(newQuestion)
             this.tabs[this.form][1] += 1
         },
         incidentsRepeat(i) {
@@ -1062,21 +1041,20 @@ export default {
 
                     /** IS INCIDENTS */
                     if (indexInGroup === 0) {
+                        console.log('== 0')
 
                         // якщо тільки початок циклу повторень.
-                        if (!self.repeat.map.filter(o => o.indexInGroup === 0).length) {
-                            self.repeat.map = [{...q}]
+                        if (!self.questions.filter(o => o.indexInGroup === 0).length) {
+                            self.questions = [{...q}]
                         }
 
-                        const repeatGroupElements = self.repeat.map.filter(e => e.repeatGroup === q.repeatGroup)
+                        const repeatGroupElements = self.questions.filter(e => e.repeatGroup === q.repeatGroup)
 
                         if (q.value === 'Yes') {
 
-                            console.log(self.questions)
-
                             if (repeatGroupElements.length === 1) {
 
-                                /* Add Type INCIDENTS == (Ticket, Accident, Claim, DUI, License Suspension) */
+                                /* Add Type INCIDENTS (Ticket, Accident, Claim, DUI, License Suspension) */
                                 // Додаємо перше питання вибір варіанта інцидента
                                 this.createRepeatField({
                                     fn: typeIncidents,
@@ -1091,88 +1069,90 @@ export default {
 
                             if (repeatGroupElements.length > 1) {
 
-                                const indexR = self.repeat.map.findIndex(elem => elem.repeatGroup === q.repeatGroup)
-                                self.repeat.map.splice(indexR, repeatGroupElements.length)
-                                self.tabs[self.form][1] -= repeatGroupElements.length
+                                let indexR = self.questions.findIndex(e => e.repeatGroup === q.repeatGroup)
+                                let lenR = repeatGroupElements.length
 
-                                const indexQ = self.questions.findIndex(elem => elem.repeatGroup && elem.repeatGroup.split('-')[0] === repeatNamePrefix)
-                                const oldQ = self.questions.filter(elem => elem.repeatGroup && elem.repeatGroup.split('-')[0] === repeatNamePrefix)
-                                self.questions.splice(indexQ, oldQ.length, ...self.repeat.map)
-
-                                // додати додаткове питання якщо не було зроблено вибір в першому
-                                // додаткове питання для наступного повтору додається після вибору відповіді в першому питанні
-                                const typeIncidentsQuestion = repeatGroupElements.find(q => q.indexInGroup === 1)
-                                if (!typeIncidentsQuestion.value) {
-                                    /* Add question new group - IS INCIDENTS == (Ticket, Accident, Claim, DUI, License Suspension) */
-                                    this.createRepeatField({
-                                        fn: lastIncidents,
-                                        repeatGroup: `${repeatNamePrefix}-${self.getIndexRepeatGroup()}`,
-                                        indexInGroup: 0,
-                                        startIndex: i,
-                                        other: true
-                                    })
+                                if (
+                                    !self.questions[indexR + repeatGroupElements.length].repeatGroup &&
+                                    self.questions[indexR + repeatGroupElements.length].indexInGroup !== 0
+                                ) {
+                                    indexR += 1
+                                    lenR -= 1
                                 }
+
+                                self.questions.splice(indexR, lenR)
+                                self.tabs[self.form][1] -= lenR
                             }
                         }
                     }
 
                     /** Type INCIDENTS */
                     if (indexInGroup === 1) {
+                        console.log('== 1')
 
                         // В залежності від вибору варіанта першого питання
                         // додаємо наступні питання (всі + додаткове питання для наступного повтору)
                         if (q.value) {
 
-                            const repeatGroupElements = self.repeat.map.filter(e => e.repeatGroup === q.repeatGroup)
+                            // Потрібно видалити зайві питання при зміні типу інцидента в другому питанні (з індексом 1)
+                            const groupToDelStartIndex = self.questions.findIndex(e => e.repeatGroup === q.repeatGroup && e.indexInGroup > 1)
+                            const groupToDel = self.questions.filter(e => e.repeatGroup === q.repeatGroup && e.indexInGroup > 1)
 
-                            // Умова, щоб при повторному рендерингу (після видалення)
-                            // не додавались зайві питання
-                            if (repeatGroupElements.length === 2) {
+                            // Умова чи потрібно додаткове питання для настопного повтору, циклу
+                            // Перевірка чи таке питання вже існує
+                            const needNextQuestion =
+                                !self.questions[groupToDelStartIndex + groupToDel.length]?.repeatGroup &&
+                                self.questions[groupToDelStartIndex + groupToDel.length]?.indexInGroup !== 0
 
-                                let offsetIndex = 0
+                            if (groupToDelStartIndex >= 0) {
+                                self.questions.splice(groupToDelStartIndex, groupToDel.length)
+                                self.tabs[self.form][1] -= groupToDel.length
+                            }
 
-                                /* Add Date Incident Question */
+                            let offsetIndex = 0
+
+                            /* Add Date Incident Question */
+                            this.createRepeatField({
+                                fn: dateIncident,
+                                repeatGroup,
+                                indexInGroup: 2,
+                                typeIncident: q.value.toLowerCase(),
+                                startIndex: i + ++offsetIndex,
+                            })
+
+                            if (q.value.toLowerCase() !== 'license suspension') {
+
+                                /* Add Type incident Question */
                                 this.createRepeatField({
-                                    fn: dateIncident,
+                                    fn: typeIncident,
                                     repeatGroup,
-                                    indexInGroup: 2,
+                                    indexInGroup: 3,
                                     typeIncident: q.value.toLowerCase(),
                                     startIndex: i + ++offsetIndex,
                                 })
 
 
-                                if (q.value.toLowerCase() !== 'license suspension') {
+                                if (q.value.toLowerCase() === 'accident') {
 
-                                    /* Add Type incident Question */
+                                    /* Add Accident Question */
                                     this.createRepeatField({
-                                        fn: typeIncident,
+                                        fn: accident,
                                         repeatGroup,
-                                        indexInGroup: 3,
-                                        typeIncident: q.value.toLowerCase(),
+                                        indexInGroup: 4,
                                         startIndex: i + ++offsetIndex,
                                     })
 
-
-                                    if (q.value.toLowerCase() === 'accident') {
-
-                                        /* Add Accident Question */
-                                        this.createRepeatField({
-                                            fn: accident,
-                                            repeatGroup,
-                                            indexInGroup: 4,
-                                            startIndex: i + ++offsetIndex,
-                                        })
-
-                                        /* Add Damage Question */
-                                        this.createRepeatField({
-                                            fn: damage,
-                                            repeatGroup,
-                                            indexInGroup: 5,
-                                            startIndex: i + ++offsetIndex,
-                                        })
-                                    }
+                                    /* Add Damage Question */
+                                    this.createRepeatField({
+                                        fn: damage,
+                                        repeatGroup,
+                                        indexInGroup: 5,
+                                        startIndex: i + ++offsetIndex,
+                                    })
                                 }
+                            }
 
+                            if (needNextQuestion) {
                                 // Додаткове питання для настопного повтору, циклу
                                 /* Add question new group - IS INCIDENTS == (Ticket, Accident, Claim, DUI, License Suspension) */
                                 this.createRepeatField({
