@@ -312,90 +312,19 @@ body {
     .formkit-option {
       padding: 0 1.2rem 1.2rem 0;
       margin: 0;
+      user-select: none;
+
+      label,
+      .formkit-label {
+        user-select: none;
+      }
     }
   }
 
   &[data-type="text"] {
     margin: 0;
   }
-
-
-
-
-
-  .form_text_field {
-  //  @extend %transition_all;
-  //
-  //  label, input {
-  //    @extend %transition_all;
-  //  }
-  //
-  //  &.error {
-  //    color: $red;
-  //
-  //    input {
-  //      color: $red;
-  //      border-color: $red;
-  //    }
-  //  }
-  //}
-  //
-  //&.options--date_mod {
-  //  @extend %global_flex_block_row_wrap_center_center;
-  //
-  //  margin: 0 -1.2rem -1.2rem 0;
-  //
-  //  .form_text_field {
-  //    width: calc( (100% - 2.4rem) / 3 );
-  //    margin-bottom: 0;
-  //    padding: 0 1.2rem 1.2rem 0;
-  //
-  //    .field {
-  //      &.error {
-  //        color: $red;
-  //      }
-  //    }
-  //  }
-  //
-  //  .message {
-  //    &.message-error {
-  //      padding: 1.4rem 0;
-  //      color: $red;
-  //    }
-  //  }
-  //}
-  //
-  //
-  //&.options--size_mod {
-  //  @extend %global_flex_block_row_nowrap_center_center;
-  //
-  //  .form_text_field {
-  //    @extend %global_flex_block_row_nowrap_center_center;
-  //
-  //    flex-direction: row-reverse;
-  //
-  //    margin: 0;
-  //
-  //    .label {
-  //      margin-bottom: 0;
-  //    }
-  //
-  //    .field {
-  //      max-width: 14.8rem;
-  //      margin-right: 1.2rem;
-  //    }
-  //
-  //    &:first-child {
-  //      margin-right: 1.2rem;
-  //    }
-  //
-  //    &:last-child {
-  //      margin-right: 0;
-  //    }
-  //  }
-  }
 }
-
 
 .q_item--select_one {
 
@@ -713,8 +642,10 @@ body {
         width: 100%;
       }
     }
+  }
 
-
+  .formkit-label {
+    margin-bottom: 0;
   }
 }
 
@@ -1070,25 +1001,27 @@ input[type=number] {
 
 
 // temp TODO:
-#site-navigation {
-  width: 100%;
-  margin-right: 0;
-}
-#site-header-cart {
-  display: none;
-}
-.storefront-breadcrumb {
-  margin-bottom: 0;
-}
-@media (min-width: 768px) {
-  .storefront-breadcrumb {
-    padding: 5px 0 !important;
-    margin: 0 !important;
-  }
-}
-.entry-header {
-  display: none;
-}
+//#site-navigation {
+//  width: 100%;
+//  margin-right: 0;
+//}
+//#site-header-cart {
+//  display: none;
+//}
+//.storefront-breadcrumb {
+//  margin-bottom: 0;
+//}
+//@media (min-width: 768px) {
+//  .storefront-breadcrumb {
+//    padding: 5px 0 !important;
+//    margin: 0 !important;
+//  }
+//}
+//.entry-header {
+//  display: none;
+//}
+
+
 //.color {
 //  &-0,
 //  &-7 {

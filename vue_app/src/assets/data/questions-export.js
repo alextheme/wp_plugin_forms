@@ -159,43 +159,6 @@ export const areYouCurrentlyInsured = {
     key: 'is_insured',
 }
 
-export const whatCompanyAreYouInsuredWith = {
-    title: "What company are you insured with?",
-    value: '',
-    options: [
-        'Select Company',
-        '21st Century Insurance',
-        'AAA Insurance Co.',
-        'Allstate',
-        'American Family',
-        'AMICA',
-        'Country Financial',
-        'Esurance',
-        'Farmers',
-        'Geico',
-        'Liberty Mutual',
-        'Mercury',
-        'Nationwide',
-        'Progressive',
-        'State Farm',
-        'The Hartford',
-        'Travelers',
-        'USAA',
-        'Other'
-    ],
-    type: 'select',
-    key: 'select_insured_company',
-    active: 0,
-    parent: 'is_insured', // key question
-}
-
-export const howLongHaveYouBeenWithCompany = {
-    title: "How long have you been with %%company_name%%?",
-    value: '',
-    options: ['Less than a year', '1-2 years', '2-3 years', '3-5 years', '5+ years'],
-    type: 'radio',
-}
-
 export const whatIsYourEmail = {
     title: "What is Your Email?",
     value: '',
@@ -219,4 +182,108 @@ export const anyAtFaultAccidentsInTheLast3Years = {
     value: '',
     options: ['Yes', 'No'],
     type: 'radio',
+}
+
+export function whatCompanyAreYouInsuredWithFunc() {
+    return {
+        title: "What company are you insured with?",
+        value: '',
+        options: [
+            'Select Company',
+            '21st Century Insurance',
+            'AAA Insurance Co.',
+            'Allstate',
+            'American Family',
+            'AMICA',
+            'Country Financial',
+            'Esurance',
+            'Farmers',
+            'Geico',
+            'Liberty Mutual',
+            'Mercury',
+            'Nationwide',
+            'Progressive',
+            'State Farm',
+            'The Hartford',
+            'Travelers',
+            'USAA',
+            'Other'
+        ],
+        type: 'select',
+        key: 'select_insured_company',
+        parent: 'is_insured', // key question
+    }
+}
+
+export function howLongHaveYouBeenWithCompanyFunc() {
+   return {
+       title: "How long have you been with %%company_name%%?",
+       value: '',
+       options: ['Less than a year', '1-2 years', '2-3 years', '3-5 years', '5+ years'],
+       type: 'radio',
+       parent: 'is_insured', // key question
+   }
+}
+export function whenDoesYourPolicyExpireFunc() {
+   return {
+       title: "When does your policy expire?",
+       descr: "It's ok to guess if you aren't sure.",
+       value: '',
+       options: ['Not Sure', 'A Few Days', '2 Weeks', '1 Month', '2 Month', '3 Month', '4-6 Month', '6 Month+'],
+       type: 'radio',
+       parent: 'is_insured', // key question
+   }
+}
+
+export function selectDeductibleForCollisionFunc(isSecond = false) {
+    return {
+        title: isSecond ? 'Second Vehicle: Select Deductible for Collision' : 'Select Deductible for Collision',
+        descr: 'Amount you pay in case of an accident.',
+        value: '',
+        options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
+        type: 'radio',
+        group: isSecond ? 'vehicle2' : undefined,
+        parent: 'Full Coverage',
+    }
+}
+export function selectDeductibleForComprehensiveFunc(isSecond = false) {
+    return  {
+        title: isSecond ? 'Second Vehicle: Select Deductible for Comprehensive' : 'Select Deductible for Comprehensive',
+        descr: 'Amount you pay in case of theft, vandalism etc.',
+        value: '',
+        options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
+        type: 'radio',
+        group: isSecond ? 'vehicle2' : undefined,
+        parent: 'Full Coverage',
+    }
+}
+
+export function pleaseSelectAnyHealthConditionsThatApplyFunc() {
+    return {
+        title: "Please Select any Health Conditions that Apply?",
+        value: [],
+        options: [
+            'AIDS / HIV',
+            'Alzheimer\'s Disease',
+            'Cancer',
+            'Clinical Depression',
+            'Heart Disease',
+            'Kidney Disease',
+            'Mental Illness',
+            'Stroke',
+            'Vascular Disease',
+            'Alcohol / Drug Abuse',
+            'Asthma',
+            'High Cholesterol',
+            'Diabetes',
+            'High Blood Pressure',
+            'Liver Disease',
+            'Pulmonary Disease',
+            'Ulcer',
+            'Other / Not Listed'
+        ],
+
+        type: 'checkbox',
+        parent: 'is_health_conditions', // key question
+    }
 }

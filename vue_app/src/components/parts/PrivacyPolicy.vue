@@ -1,6 +1,6 @@
 <template>
     <!-- No Spam Info -->
-    <li class="no_spam_info" v-if="showNoSpamInfo">
+    <li class="no_spam_info">
         <img :src="url + img" alt="">
         <ok />
         <span class="text">No Spam Guaranteed</span>
@@ -44,9 +44,6 @@ import img from '../../assets/images/icons/girl.png'
 
 export default {
     components: { Ok },
-    props: {
-        showNoSpamInfo: Boolean
-    },
     data: () => ({
         url: sfi_params.homeUrl,
         privacyPolicyLink: `${sfi_params.homeUrl}/${sfi_params.privacy_policy_link}`,

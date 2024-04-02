@@ -296,12 +296,12 @@ const renters = () => {
 }
 
 
-auto()
+// auto()
 // home()
 // life()
 // health()
 // medicare()
-// commercial()
+// commerc  ial()
 // bike()
 // renters()
 

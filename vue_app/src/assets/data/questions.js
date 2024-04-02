@@ -1,9 +1,25 @@
 import {
-    address, addressV2, anyAtFaultAccidentsInTheLast3Years, areYouCurrentlyInsured,
-    areYouMarried, howLongHaveYouBeenWithCompany, whatCompanyAreYouInsuredWith,
-    whatIsYourCreditScore, whatIsYourDateOfBirth, whatIsYourEducationLevel,
-    whatIsYourEmail, whatIsYourGender, whatIsYourGenderMin, whatIsYourGenderOptional,
-    whatIsYourName, whatIsYourOccupation, whatIsYourPhoneNumber, whatTypeOfHomeDoYouLiveIn
+    address,
+    addressV2,
+    anyAtFaultAccidentsInTheLast3Years,
+    areYouCurrentlyInsured,
+    areYouMarried,
+    howLongHaveYouBeenWithCompanyFunc,
+    selectDeductibleForCollisionFunc,
+    selectDeductibleForComprehensiveFunc,
+    whatCompanyAreYouInsuredWithFunc,
+    whatIsYourCreditScore,
+    whatIsYourDateOfBirth,
+    whatIsYourEducationLevel,
+    whatIsYourEmail,
+    whatIsYourGender,
+    whatIsYourGenderMin,
+    whatIsYourGenderOptional,
+    whatIsYourName,
+    whatIsYourOccupation,
+    whatIsYourPhoneNumber,
+    whatTypeOfHomeDoYouLiveIn,
+    whenDoesYourPolicyExpireFunc
 } from "./questions-export.js";
 
 // import motorcycle from './moto.js'
@@ -215,20 +231,8 @@ const formData = {
             options: ['Full Coverage', 'Liability Only'],
             type: 'radio',
         },
-        {
-            title: 'Select Deductible for Collision',
-            descr: 'Amount you pay in case of an accident.',
-            value: '',
-            options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
-            type: 'radio',
-        },
-        {
-            title: 'Select Deductible for Comprehensive',
-            descr: 'Amount you pay in case of theft, vandalism etc.',
-            value: '',
-            options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
-            type: 'radio',
-        },
+        selectDeductibleForCollisionFunc(),
+        selectDeductibleForComprehensiveFunc(),
         {
             title: 'Want to add a second vehicle?',
             descr: 'You can save up to 25% by having multiple vehicles on the same policy',
@@ -299,6 +303,7 @@ const formData = {
             options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
             type: 'radio',
             group: 'vehicle2',
+            parent: 'Full Coverage',
         },
         {
             title: 'Second Vehicle: Select Deductible for Comprehensive',
@@ -307,6 +312,7 @@ const formData = {
             options: ['$2500', '$1500', '$1000', '$750', '$500', '$250', '$100', '$0'],
             type: 'radio',
             group: 'vehicle2',
+            parent: 'Full Coverage',
         },
         // Second Vehicle
 
@@ -489,6 +495,7 @@ const formData = {
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
+            key: 'is_insured',
         },
         {
             title: "How much coverage do you need?",
@@ -577,15 +584,9 @@ const formData = {
         whatIsYourOccupation,
         whatIsYourCreditScore,
         areYouCurrentlyInsured,
-        whatCompanyAreYouInsuredWith,
-        howLongHaveYouBeenWithCompany,
-        {
-            title: "When does your policy expire?",
-            descr: "It's ok to guess if you aren't sure.",
-            value: '',
-            options: ['Not Sure', 'A Few Days', '2 Weeks', '1 Month', '2 Month', '3 Month', '4-6 Month', '6 Month+'],
-            type: 'radio',
-        },
+        whatCompanyAreYouInsuredWithFunc(),
+        howLongHaveYouBeenWithCompanyFunc(),
+        whenDoesYourPolicyExpireFunc(),
         {
             title: "Last question Ertgerg, how much would \n it cost to rebuild your home?",
             descr: 'Rebuild cost is different from market value. If you’re not sure we recommend using $150 per sq ft.',
@@ -627,6 +628,7 @@ const formData = {
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
+            key: 'is_health_conditions',
         },
         {
             title: "What Coverage Are You Interested in?",
@@ -788,8 +790,8 @@ const formData = {
             key: 'select_motorcycle_models'
         },
         areYouCurrentlyInsured,
-        whatCompanyAreYouInsuredWith,
-        howLongHaveYouBeenWithCompany,
+        whatCompanyAreYouInsuredWithFunc(),
+        howLongHaveYouBeenWithCompanyFunc(),
         {
             title: 'Are You a Homeowner?',
             value: '',
@@ -822,7 +824,7 @@ const formData = {
         },
 
         areYouCurrentlyInsured,
-        whatCompanyAreYouInsuredWith,
+        whatCompanyAreYouInsuredWithFunc(),
 
         {
             title: 'How Much Personal Property Do You Want to Insure?',

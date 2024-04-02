@@ -488,7 +488,7 @@
                     <button type="button" @click="goTab(3, true)">Get my good quotes</button>
                 </li>
 
-                <privacy-policy :show-no-spam-info="!isTabs" v-if="showPrivacyPolicy" />
+                <privacy-policy v-if="showPrivacyPolicy" />
 
             </ul>
 
@@ -509,7 +509,21 @@ import SelectDropdown from './parts/SelectDropdown.vue'
 import IconOk from './parts/IconOk.vue'
 import axios from 'axios'
 import {motorcycleDatabase} from '../assets/data/moto.js'
-import { lastIncidents, typeIncidents, dateIncident, typeIncident, accident, damage } from "../assets/data/questions-repeat.js";
+import {
+    accident,
+    damage,
+    dateIncident,
+    lastIncidents,
+    typeIncident,
+    typeIncidents
+} from "../assets/data/questions-repeat.js";
+import {
+    howLongHaveYouBeenWithCompanyFunc,
+    whatCompanyAreYouInsuredWithFunc,
+    whenDoesYourPolicyExpireFunc,
+    selectDeductibleForCollisionFunc,
+    selectDeductibleForComprehensiveFunc, pleaseSelectAnyHealthConditionsThatApplyFunc,
+} from "../assets/data/questions-export.js";
 
 export default {
     components: { Done, PrivacyPolicy, SelectDropdown, QuestionHeader, IconOk },
@@ -741,25 +755,98 @@ export default {
                 if (question.key === 'add_second_vehicle') {
                     self.isSecondVehicle = ('yes' === question.value?.toLowerCase())
                 }
-                if (question.key === 'add_second_driver') {
-                    const isSecondDriver = ('yes' === question.value?.toLowerCase())
 
-                    self.isSecondDriver = isSecondDriver
+                if (question.key === 'add_second_driver') {
+                    self.isSecondDriver = ('yes' === question.value?.toLowerCase())
                 }
 
                 if (question.key === 'is_insured') {
-                    this.questions.forEach(q => {
-                        if (q.parent === 'is_insured') {
-                            if ('yes' === question.value?.toLowerCase()) {
-                                q.active = 1
-                                q.complete = false
-                            } else {
-                                q.active = 0
-                                q.value = q.options[0]
-                                q.complete = true
+                    if (question.value === 'Yes') {
+                        if (self.questions[i + 1].parent !== 'is_insured') {
+
+                            if (self.form === 'auto') {
+                                self.questions.splice(i + 1, 0,
+                                    whatCompanyAreYouInsuredWithFunc(),
+                                    howLongHaveYouBeenWithCompanyFunc(),
+                                    whenDoesYourPolicyExpireFunc()
+                                )
+                                // self.tabs[self.form][self.tab.active] += 3
+                            }
+
+                            if (self.form === 'home') {
+                                self.questions.splice(i + 1, 0,
+                                    whatCompanyAreYouInsuredWithFunc(),
+                                    howLongHaveYouBeenWithCompanyFunc(),
+                                    whenDoesYourPolicyExpireFunc()
+                                )
+                                self.tabs[self.form][self.tab.active] += 3
+                            }
+
+                            if (self.form === 'bike') {
+                                self.questions.splice(i + 1, 0,
+                                    whatCompanyAreYouInsuredWithFunc(),
+                                    howLongHaveYouBeenWithCompanyFunc()
+                                )
+                            }
+
+                            if (self.form === 'renters') {
+                                self.questions.splice(i + 1, 0,
+                                    whatCompanyAreYouInsuredWithFunc()
+                                )
+                            }
+
+                        }
+                    } else {
+                        if (self.questions[i + 1].parent === 'is_insured') {
+                            if (self.form === 'auto') {
+                                self.questions.splice(i + 1, 3)
+                                self.tabs[self.form][self.tab.active] -= 3
+                            }
+                            if (self.form === 'home') {
+                                self.questions.splice(i + 1, 3)
+                                self.tabs[self.form][self.tab.active] -= 3
+                            }
+                            if (self.form === 'bike') {
+                                self.questions.splice(i + 1, 2)
+                            }
+                            if (self.form === 'renters') {
+                                self.questions.splice(i + 1, 1)
                             }
                         }
-                    })
+                    }
+                }
+
+                if (question.value === 'Full Coverage') {
+                    if (self.questions[i + 1].parent !== 'Full Coverage') {
+                        self.questions.splice(
+                            i + 1,
+                            0,
+                            selectDeductibleForCollisionFunc(question.group === 'vehicle2'),
+                            selectDeductibleForComprehensiveFunc(question.group === 'vehicle2')
+                        )
+                        self.tabs[self.form][self.tab.active] += 2
+                    }
+                }
+                if (question.value === 'Liability Only') {
+                    if (self.questions[i + 1].parent === 'Full Coverage') {
+                        self.questions.splice(i + 1, 2)
+                        self.tabs[self.form][self.tab.active] -= 2
+                    }
+                }
+
+                if (question.key === 'is_health_conditions') {
+                    if (question.value === 'Yes') {
+                        if (self.questions[i + 1].parent !== 'is_health_conditions') {
+                            self.questions.splice(i + 1, 0,
+                                pleaseSelectAnyHealthConditionsThatApplyFunc()
+                            )
+                        }
+
+                    } else {
+                        if (self.questions[i + 1].parent === 'is_health_conditions') {
+                            self.questions.splice(i + 1, 1)
+                        }
+                    }
                 }
 
                 question.complete = !!question.value
@@ -1041,7 +1128,6 @@ export default {
 
                     /** IS INCIDENTS */
                     if (indexInGroup === 0) {
-                        console.log('== 0')
 
                         // якщо тільки початок циклу повторень.
                         if (!self.questions.filter(o => o.indexInGroup === 0).length) {
@@ -1088,7 +1174,6 @@ export default {
 
                     /** Type INCIDENTS */
                     if (indexInGroup === 1) {
-                        console.log('== 1')
 
                         // В залежності від вибору варіанта першого питання
                         // додаємо наступні питання (всі + додаткове питання для наступного повтору)
@@ -1343,12 +1428,6 @@ export default {
                         }
                     }
 
-                    if (q.key === 'is_insured') {
-                        if ('yes' !== q.value?.toLowerCase()) {
-                            next = this.questions[++i + 1]
-                        }
-                    }
-
                     if (next) {
                         if (q.show && q.complete) {
                             next.show = true
@@ -1407,13 +1486,14 @@ export default {
            @param time: the exact amount of time the scrolling will take (in milliseconds)
         */
         scrollToSmoothly(pos, time) {
-            var currentPos = window.pageYOffset;
-            var start = null;
-            if(time == null) time = 500;
-            pos = +pos; time = +time;
+            let currentPos = window.pageYOffset
+            let start = null
+            if(time == null) time = 1000
+            pos = +pos; time = +time
             window.requestAnimationFrame(function step(currentTime) {
+                console.log(currentTime)
                 start = !start ? currentTime : start;
-                var progress = currentTime - start;
+                let progress = currentTime - start;
                 if (currentPos < pos) {
                     window.scrollTo(0, ((pos - currentPos) * progress / time) + currentPos);
                 } else {
@@ -1424,14 +1504,10 @@ export default {
                 } else {
                     window.scrollTo(0, pos);
                 }
-            });
+            })
         },
         scrollController(id) {
-            return null
-            const is_insured = this.questions.find(q => q.key === 'is_insured')
-            if (is_insured && is_insured.value.toLowerCase() === 'yes' && id === is_insured.id + 1) {
-                id = is_insured.id
-            }
+            // return null
 
             const htmlElem = this.$refs['qs' + id][0]
             const elemCoord = this.getCoords(htmlElem)
@@ -1445,30 +1521,43 @@ export default {
             this.scrollToSmoothly(elemCoord.top + offsetY)
         },
 
+        /** Cookies */
+        setCookie(name, value, minutes) {
+            let expires = ''
+            if (minutes) {
+                const date = new Date()
+                date.setTime(date.getTime() + (minutes * 60 * 1000))
+                expires = '; expires=' + date.toUTCString()
+            }
+            document.cookie = name + '=' + (value || '')  + expires + '; path=/'
+        },
+        getCookies(){
+            let pairs = document.cookie.split(';')
+            let cookies = {}
+            for (let i=0; i < pairs.length; i++){
+                let pair = pairs[i].split('=')
+                cookies[(pair[0]+'').trim()] = unescape(pair.slice(1).join('='))
+            }
+            return cookies
+        },
+
         /** Send Content */
         sendContent() {
+            const self = this
+            const cookies = this.getCookies('isSendMail')
 
-            const data = {
-                id: this.form,
-                questions: this.questions.map(q => {
-                    return {
-                        // id: q.id,
-                        title: q.title,
-                        type: q.type,
-                        value: q.value,
-                    }
-                }),
-                user_name: this.userName,
-                auto_make: `${this.autoMake.auto_make} ${this.autoMake.auto_model}`,
+            if (cookies.isSendMail === 'send') {
+                console.log('No send. Timeout 3 min')
+                return
             }
 
             // Create Html Content for PDF File
             let content = '<div>'
-            content += `<h1>${data.user_name.full_name} ${data.user_name.last_name}</h1>`
+            content += `<h1>${this.userName.full_name} ${this.userName.last_name}</h1>`
             content += `<br>`
-            content += `<span>${data.id}</span>`
+            content += `<span>${this.form}</span>`
             content += `<br>`
-            data.questions.forEach(qsn => {
+            this.questions.forEach(qsn => {
                 const title = this.form === 'car' ? qsn.title.replace('%%car_makes%%', 'this.carMakes') : qsn.title
                 let value = ''
                 switch (qsn.type) {
@@ -1500,13 +1589,14 @@ export default {
                     action: 'form_insurance_ajax',
                     nonce: sfi_params.nonce,
                     data: {
-                        id: data.id,
-                        user_name: data.user_name,
-                        car_make: data.car_make,
+                        id: this.form,
+                        user_name: this.userName,
+                        car_make: this.autoMake ? `${this.autoMake.auto_make} ${this.autoMake.auto_model}` : '',
                         content: content,
                     },
                 },
                 success: function (data) {
+                    self.setCookie('isSendMail', 'send', 3)
                     console.log('success!')
                 },
                 error: function (error) {
