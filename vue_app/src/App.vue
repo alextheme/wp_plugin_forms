@@ -2,8 +2,6 @@
     <div class="base" id="form_insurance">
 
         <forms :form="form" :qs="qs"></forms>
-<!--        <forms v-if="form!=='auto'" :form="form" :qs="qs"></forms>-->
-<!--        <auto2 v-if="form==='auto'" :form="form" :qs="qs"></auto2>-->
 
     </div>
 </template>
