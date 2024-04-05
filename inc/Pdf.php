@@ -117,7 +117,7 @@ class Pdf {
 //        $this->pdf->lastPage();
 
         //Close and output PDF document
-        $pdf_file_path = $this->folder . '/example_' . date('YmdHis') . '.pdf';
+        $pdf_file_path = $this->folder . '/quote_' . date('YmdHis') . '.pdf';
 
 //        $this->pdf->Output( $this->file_pdf, 'I'); // show in browser
         $pdf->Output( $pdf_file_path, 'F'); // save file
