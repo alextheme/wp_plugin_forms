@@ -25,27 +25,6 @@ import {
 // import motorcycle from './moto.js'
 import { motorcycleCheckbox, motorcycleDatabase } from './moto.js'
 
-// example validation rule
-// :validation="[['required'], ['matches', /^\d{3}-\d{3}-\d{4}$/]]"
-
-// TODO: Required option Appears during the required question
-// Select ‘Not Sure’ if you don’t know what coverage you want.
-// Your Information is safe & secure
-// Insurance companies require this in order to provide an accurate quote.
-// No Spam Guaranteed
-// Your life insurance quotes are ready
-
-// TODO: Type of Ticket
-// type_of_ticket: [
-//     'Speeding less than 10 mph over',
-//     'Speeding more than 10 mph over',
-//     'Speeding more than 20 mph over',
-//     'Drug possession',
-//     'Minor in possession',
-//     'Open Container',
-//     'DUI/DWI',
-// ]
-
 const formData = {
     test: [
         {

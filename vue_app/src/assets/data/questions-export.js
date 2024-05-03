@@ -23,7 +23,7 @@ export const address =  {
 
 export const addressV2   =  {
     ...address,
-    value: {
+    value:  {
         ...address.value,
         city: ''
     },

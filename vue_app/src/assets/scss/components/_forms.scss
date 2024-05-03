@@ -4,7 +4,47 @@
   //text-transform: capitalize;
 }
 
-/* input autofill */
+#shbb_forms_app {
+  input {
+    background: transparent;
+
+    /* Chrome, Safari, Edge, Opera */
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    /* Firefox */
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
+  }
+
+  input,
+  textarea,
+  input[type="reset"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="password"],
+  input[type="search"] {
+    &:focus {
+      outline-color: $lincks_blue;
+      outline-offset: -2px;
+    }
+
+    &.valid_error {
+      outline-color: $red;
+      border-color: $red !important;
+      box-shadow: 0 0 3px 1px $red !important;
+    }
+  }
+
+}
+
+/*****************
+input autofill
+*/
 :-webkit-autofill {
   animation-name: onAutoFillStart;
 }
@@ -13,7 +53,9 @@
 }
 @keyframes onAutoFillStart { from {} to {} }
 @keyframes onAutoFillCancel { from {} to {} }
-/* input autofill */
+/*
+input autofill
+******************/
 
 body {
   overflow-x: hidden;
@@ -416,6 +458,7 @@ body {
     width: 25%;
     padding: 0 1.2rem 1.2rem 0;
     margin: 0 0 1.4rem;
+    color: $blue;
 
     @include bp($point_5) {
       width: 33.333%;
@@ -493,6 +536,7 @@ body {
     width: 50%;
     padding: 0 1.2rem 1.2rem 0;
     margin: 0 0 1.4rem;
+    color: $blue;
 
     @include bp($point_5) {
       width: 33.333%;
@@ -855,11 +899,26 @@ body {
 
     font-family: $font_1;
     font-weight: 500;
-    font-size: 4.4rem;
     line-height: 1.1;
     text-align: center;
 
     color: $blue;
+
+    @include bp($point_2, min) {
+      font-size: 4.4rem;
+    }
+
+    @include bp($point_3) {
+      font-size: 3rem;
+    }
+
+    @include bp(690px) {
+      max-width: 38rem;
+    }
+
+    span {
+      display: block;
+    }
   }
 
   .descr {
@@ -869,6 +928,7 @@ body {
   }
 
   .go_home_btn {
+    @extend %transition_opacity;
     @extend %button;
 
     height: 6rem;
@@ -877,7 +937,7 @@ body {
 
     line-height: 6rem;
 
-    text-decoration: none;
+    text-decoration: none !important;
     border-radius: 3rem;
     color: $white;
     background-color: $red;
@@ -904,7 +964,58 @@ body {
 
   .working_item {
     padding: 0 3rem 3rem 0;
+  }
 
+  .form_done_slider {
+    width: 100%;
+
+    .vueperslides__arrow {
+
+      svg {
+        width: .9rem;
+        height: 1.8rem;
+        padding: 0;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: $white;
+        border-color: $white;
+        outline-color: $white;
+      }
+    }
+  }
+
+  // V 2
+  .form_done_slider {
+    .splide__slide {
+      @extend %global_flex_block_row_wrap_center_center;
+    }
+
+    .splide__arrow {
+      background: transparent;
+
+      &:focus {
+        outline-color: rgba(0, 0, 0, 0.2);
+      }
+
+      svg {
+        width: 1.8rem;
+        height: 1.8rem;
+      }
+    }
+
+    .splide__arrow--prev {
+      left: -4.5rem;
+    }
+
+    .splide__arrow--next {
+      right: -4.5rem;
+    }
+
+    .splide__pagination {
+      display: none;
+    }
   }
 }
 
@@ -1000,55 +1111,55 @@ input[type=number] {
 }
 
 
-// temp TODO:
-//#site-navigation {
-//  width: 100%;
-//  margin-right: 0;
-//}
-//#site-header-cart {
-//  display: none;
-//}
-//.storefront-breadcrumb {
-//  margin-bottom: 0;
-//}
-//@media (min-width: 768px) {
-//  .storefront-breadcrumb {
-//    padding: 5px 0 !important;
-//    margin: 0 !important;
-//  }
-//}
-//.entry-header {
-//  display: none;
-//}
+ //temp TODO:
+#site-navigation {
+  width: 100%;
+  margin-right: 0;
+}
+#site-header-cart {
+  display: none;
+}
+.storefront-breadcrumb {
+  margin-bottom: 0;
+}
+@media (min-width: 768px) {
+  .storefront-breadcrumb {
+    padding: 5px 0 !important;
+    margin: 0 !important;
+  }
+}
+.entry-header {
+  display: none;
+}
 
 
-//.color {
-//  &-0,
-//  &-7 {
-//    background-color: #c76c6c;
-//  }
-//  &-1,
-//  &-8 {
-//    background-color: #ce9146;
-//  }
-//  &-2 ,
-//  &-9 {
-//    background-color: #edff4b;
-//  }
-//  &-3,
-//  &-10 {
-//    background-color: #4a9f13;
-//  }
-//  &-4,
-//  &-11 {
-//    background-color: #7fcaff;
-//  }
-//  &-5,
-//  &-12 {
-//    background-color: #1e38de;
-//  }
-//  &-6,
-//  &-13 {
-//    background-color: #cc1ede;
-//  }
-//}
+.color {
+  &-0,
+  &-7 {
+    background-color: #c76c6c;
+  }
+  &-1,
+  &-8 {
+    background-color: #ce9146;
+  }
+  &-2 ,
+  &-9 {
+    background-color: #edff4b;
+  }
+  &-3,
+  &-10 {
+    background-color: #4a9f13;
+  }
+  &-4,
+  &-11 {
+    background-color: #7fcaff;
+  }
+  &-5,
+  &-12 {
+    background-color: #1e38de;
+  }
+  &-6,
+  &-13 {
+    background-color: #cc1ede;
+  }
+}

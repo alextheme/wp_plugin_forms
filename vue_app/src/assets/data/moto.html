@@ -876,14 +876,9 @@
         {"make":"ZUNDAPP","models":["Bella","K","Z"]}
     ]
 
-    console.log(motorcycleDatabase.length)
-
     const capitalize = motorcycleDatabase
         .map(moto => moto.make[0].toUpperCase() + moto.make.toLowerCase().slice(1))
         .filter(make => !motorcycleCheckbox.map(e => e.toLowerCase()).includes(make.toLowerCase()))
-
-
-    console.log(capitalize)
 
 </script>
 </body>

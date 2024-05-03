@@ -66,7 +66,7 @@
                         </svg>
                     </span>
 
-                    <h2 v-if="tab.active === 0" class="title">Compare Health Insurance Rates in Wielkopolskie</h2>
+                    <h2 v-if="tab.active === 0" class="title">Compare Health Insurance Rates</h2>
                 </template>
 
                 <template v-if="form==='life'">
@@ -339,6 +339,8 @@
                                         type="text"
                                         @animationstart="checkAutofill"
                                         @input="validateAddress('address', i, $event.value)"
+                                        @focus="addressBlur(i, $event)"
+                                        @blur="addressBlur(i, $event)"
                                     />
                                     <FormKit
                                         v-model="field.value.unit"
@@ -347,6 +349,8 @@
                                         type="text"
                                         @animationstart="checkAutofill"
                                         @input="validateAddress('unit', i, $event.value)"
+                                        @focus="addressBlur(i, $event)"
+                                        @blur="addressBlur(i, $event)"
                                     />
                                     <FormKit
                                         v-if="field.type === 'address_v2'"
@@ -355,6 +359,8 @@
                                         type="text"
                                         @animationstart="checkAutofill"
                                         @input="validateAddress('city', i, $event.value)"
+                                        @focus="addressBlur(i, $event)"
+                                        @blur="addressBlur(i, $event)"
                                     />
                                     <FormKit
                                         v-if="field.type === 'address'"
@@ -363,6 +369,8 @@
                                         type="text"
                                         @animationstart="checkAutofill"
                                         @input="validateAddress('apt', i, $event.value)"
+                                        @focus="addressBlur(i, $event)"
+                                        @blur="addressBlur(i, $event)"
                                     />
 
                                     <div class="select_dropdown">
@@ -372,6 +380,8 @@
                                             :default="field.value.state"
                                             :options="field.options"
                                             @input="validateAddress('state', i, $event.value)"
+                                            @focus="addressBlur(i, $event)"
+                                            @blur="addressBlur(i, $event)"
                                         />
                                     </div>
 
@@ -381,6 +391,8 @@
                                         name="zip"
                                         @animationstart="checkAutofill"
                                         @input="validateAddress('zip', i, $event.value)"
+                                        @focus="addressBlur(i, $event)"
+                                        @blur="addressBlur(i, $event)"
                                     />
                                 </FormKit>
 
@@ -476,7 +488,7 @@
                 <li :class="['button_next_tab', { done: !isTabs }]" v-show="tab.active === 0 && tab.complete[0]">
                     <button type="button" @click="goTab(1, true)">
                         <span v-if="isTabs">Next Step</span>
-                        <span v-if="!isTabs">Send Request</span>
+                        <span v-if="!isTabs">Get a Quote</span>
                     </button>
                 </li>
 
@@ -992,22 +1004,23 @@ export default {
             const isTypeAddress2 = question.type === 'address_v2'
 
             setTimeout(() => {
-                    question.value.zip = question.value.zip.trim().replace(/\D/g, '').slice(0, 5)
+                question.value.zip = question.value.zip.trim().replace(/\D/g, '').slice(0, 5)
 
                 const valid = {
                     address: !!question.value.address,
-                    unit: !!question.value.unit,
-                    city: isTypeAddress2 ? !!question.value.city : true,
-                    state: !!question.value.state,
                     zip: !!question.value.zip,
+                    // unit: !!question.value.unit,
+                    // city: isTypeAddress2 ? !!question.value.city : true,
+                    // state: !!question.value.state,
                 }
 
-                if (name === 'state') {
-                    question.value.state = value
-                    valid.state = !!value
-                }
+                // if (name === 'state') {
+                //     question.value.state = value
+                //     valid.state = !!value
+                // }
 
-                question.complete = valid.address && valid.unit && valid.city && valid.state && valid.zip
+                // question.complete = valid.address && valid.unit && valid.city && valid.state && valid.zip
+                question.complete = valid.address && valid.zip
 
 
                 if (!this.autofilled) {
@@ -1043,7 +1056,9 @@ export default {
                 }
 
                 if (type === 'size_two') {
-                    question.complete = !!(+question.value.ft && +question.value.in)
+                    const ftInt = !!(+question.value.ft)
+                    const inInt = question.value.in.length !== 0 && typeof +question.value.in === 'number'
+                    question.complete = ftInt && inInt
                 }
 
                 if (type === 'number') {
@@ -1088,6 +1103,36 @@ export default {
 
                 this.scrollController(i)
             }, 0)
+        },
+
+        /** Address Focus & Blur */
+        addressBlur(i, event) {
+            const qItem = event.target.closest('.q_item.id'+ i +'.show')
+            const fieldAddress = qItem.querySelector('input[name="address"]')
+            const fieldZip = qItem.querySelector('input[name="zip"]')
+            const { address, zip } = this.questions[i].value
+
+
+
+            if (event.type === 'blur') {
+                this.questions[i].focus = 'blur'
+            } else {
+                this.questions[i].focus = 'focus'
+                fieldAddress.classList.remove('valid_error')
+                fieldZip.classList.remove('valid_error')
+            }
+
+            console.log(this.questions[i].complete)
+
+            if (this.questions[i].focus === 'blur') {
+
+                if ( ! address ) {
+                    fieldAddress.classList.add('valid_error')
+                }
+                if ( ! zip ) {
+                    fieldZip.classList.add('valid_error')
+                }
+            }
         },
 
         /** Check Autofill */
@@ -1276,7 +1321,7 @@ export default {
             }, 0)
         },
 
-        /** Set Status Complete -- Validation */
+        /** Validate - Set Status Complete */
         setStatusCompleteQuestions() {
 
             this.questions.forEach((q, inxQ) => {
@@ -1300,7 +1345,8 @@ export default {
                         else if (q.type === 'address' || q.type === 'address_v2') {
                             const { address, unit, apt, city, state, zip } = q.value
                             const validCity = q.type === 'address_v2' ? !!city : true
-                            complete = !!address && !!unit && !!state && !!zip && validCity
+                            // complete = !!address && !!state && !!zip && validCity
+                            complete = !!address && !!zip
                         }
 
                         // Name
@@ -1314,7 +1360,13 @@ export default {
 
                         // Для всих остальних
                         else {
-                            complete = Object.entries(q.value).every(arr => !!arr[1])
+                            if (q.type === 'size_two') {
+                                const ftInt = !!(+q.value.ft)
+                                const inInt = q.value.in.length !== 0 && typeof +q.value.in === 'number'
+                                complete = ftInt && inInt
+                            } else {
+                                complete = Object.entries(q.value).every(arr => !!arr[1])
+                            }
                         }
                     }
 
@@ -1491,7 +1543,6 @@ export default {
             if(time == null) time = 1000
             pos = +pos; time = +time
             window.requestAnimationFrame(function step(currentTime) {
-                console.log(currentTime)
                 start = !start ? currentTime : start;
                 let progress = currentTime - start;
                 if (currentPos < pos) {
@@ -1548,7 +1599,7 @@ export default {
 
             if (cookies.isSendMail === 'send') {
                 console.log('No send. Timeout 3 min')
-                return
+                // return
             }
 
             // Create Html Content for PDF File
@@ -1576,11 +1627,16 @@ export default {
                     case 'address_v2':
                         value = `${qsn.value.address}, ${qsn.value.city}, ${qsn.value.state}, ${qsn.value.unit}, ${qsn.value.zip}`
                         break
+                    case 'size_two':
+                        value = `ft: ${qsn.value.ft}, in: ${qsn.value.in}`
+                        break
                     default: value = qsn.value
                 }
                 content += `<div><h4>${title}</h4><p>${value}</p></div>`
             })
             content += '</div>'
+
+            console.log(content)
 
             jQuery.ajax({
                 url: sfi_params.adminUri,

@@ -282,7 +282,7 @@
                 <li :class="['button_next_tab', { done: !isTabs }]" ref="btnNextTab_1" v-show="tab.active === 0 && tab.complete[0]">
                     <button type="button" @click="goTab(1, true)">
                         <span v-if="isTabs">Next Step</span>
-                        <span v-if="!isTabs">Send Request</span>
+                        <span v-if="!isTabs">Get a Quote</span>
                     </button>
                 </li>
 

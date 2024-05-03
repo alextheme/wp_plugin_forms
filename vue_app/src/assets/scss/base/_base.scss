@@ -96,36 +96,4 @@ a {
 	}
 }
 
-#shbb_forms_app {
-	input {
-		background: transparent;
-
-		/* Chrome, Safari, Edge, Opera */
-		&::-webkit-outer-spin-button,
-		&::-webkit-inner-spin-button {
-			-webkit-appearance: none;
-			margin: 0;
-		}
-		/* Firefox */
-		&[type=number] {
-			-moz-appearance: textfield;
-		}
-	}
-
-	input,
-	textarea,
-	input[type="reset"],
-	input[type="email"],
-	input[type="tel"],
-	input[type="url"],
-	input[type="password"],
-	input[type="search"] {
-		&:focus {
-			outline-color: $lincks_blue;
-			outline-offset: -2px;
-		}
-	}
-
-}
-
 //------------------------------------------------------------base styles###

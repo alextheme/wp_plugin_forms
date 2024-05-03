@@ -37,6 +37,8 @@ class Shortcode {
 
         wp_localize_script( 'sfi_app_js', 'sfi_params', [
             'homeUrl' => home_url(),
+            'pluginUrl' => SFI_PLUGIN_URL,
+            'countImages' => count(glob(SFI_PLUGIN_PATH . '/assets/front/images/*.webp')),
             'privacy_policy_link' => 'privacy-policy',
             'terms_use_link' => 'privacy-policy',
             'listed_businesses_link' => '',
