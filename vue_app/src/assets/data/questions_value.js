@@ -298,7 +298,7 @@ const renters = () => {
 
 // auto()
 // home()
-life()
+// life()
 // health()
 // medicare()
 // commerc  ial()
