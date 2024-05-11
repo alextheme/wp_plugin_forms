@@ -12,7 +12,7 @@ const server = browserSync.create()
 
 export const serve = done => {
     server.init({
-        proxy: 'http://localhost/wp03/form-auto/' // put your local website link here
+        proxy: 'http://localhost/wp03/life/' // put your local website link here
     })
     done()
 }
