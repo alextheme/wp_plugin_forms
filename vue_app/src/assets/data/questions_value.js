@@ -163,11 +163,11 @@ const life = () => {
     q.life[9].value.full_name = 'Oleg'
     q.life[9].value.last_name = 'Korob'
 
-    // q.life[10].value.address = 'Shevchenko, 231'
-    // q.life[10].value.unit = '111'
-    // q.life[10].value.city = 'Berdychiv'
-    // q.life[10].value.state = 'OH'
-    // q.life[10].value.zip = '222'
+    q.life[10].value.address = 'Shevchenko, 231'
+    q.life[10].value.unit = '111'
+    q.life[10].value.city = 'Berdychiv'
+    q.life[10].value.state = 'OH'
+    q.life[10].value.zip = '222'
 
     q.life[11].value = 'favorstreet21@gmail.com'
     q.life[12].value = '123456789'
