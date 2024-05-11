@@ -12,7 +12,7 @@
                    <ul class="list_upcoming_events">
                        <li class="item" v-for="(item, i) in nextHappens">
                            <div class="item__in">
-                               <div class="item__number">{{ String(i).padStart(2, '0') }}</div>
+                               <div class="item__number">{{ String(i + 1).padStart(2, '0') }}</div>
                                <div class="item__content">
                                    <p class="text" v-for="text in item.content">{{ text }}</p>
                                </div>

@@ -11,7 +11,7 @@
             </ul>
 
             <!-- Progress bar -->
-            <div class="form_progress"><span :style="{ width: progress + '%' }"></span></div>
+            <div class="form_progress"><span :style="{ width: progress + '%', minWidth: progressDone + '%' }"></span></div>
         </nav>
 
         <form class="form_questions" v-if="!showDonePage" method="post"><div class="section_in">
@@ -550,6 +550,7 @@ export default {
             nav: { auto: ['Vehicles', 'Drivers', 'Final Details', 'Quotes'], home: ['Home', 'Owner', 'Final Details', 'Quotes'] },
             tabs: { auto: [15, 36, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
 
+            progressDone: 0,
             autofilled: false,
             isSecondVehicle: false,
             isSecondDriver: false,
@@ -1496,6 +1497,8 @@ export default {
         },
         goTab(tab, isButton = false) {
             this.tab.active = tab
+
+            this.progressDone = tab === 3 ? 100 : 0 // %
 
             window.scrollTo(0, 0)
 

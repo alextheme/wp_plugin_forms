@@ -5,6 +5,8 @@
 }
 
 #shbb_forms_app {
+  padding-bottom: 7rem; // Footer height
+
   input {
     background: transparent;
 
@@ -876,7 +878,7 @@ body {
   width: 100%;
   min-height: calc(100vh - .4rem);
   margin-bottom: -7rem;
-  padding-top: 0;
+  padding: 0;
 
   &.form--auto,
   &.form--home {
@@ -895,18 +897,18 @@ body {
   }
 
   .form_done__row {
+    @include bp($point_4 + 1, min) {
+      padding-top: 6rem;
+      padding-bottom: 6rem;
+    }
+
+    @include bp($point_4) {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
     &:first-child {
       border-bottom: 1px solid $devider_light_blue;
-
-      @include bp($point_4 + 1, min) {
-        padding-bottom: 6rem;
-        margin-bottom: 6rem;
-      }
-
-      @include bp($point_4) {
-        padding-bottom: 4rem;
-        margin-bottom: 4rem;
-      }
     }
   }
 
@@ -1051,6 +1053,7 @@ body {
 
   .form_done_slider {
     width: 100%;
+    background: $white;
 
     .vueperslides__arrow {
 
@@ -1077,6 +1080,7 @@ body {
 
     .splide__arrow {
       background: transparent;
+      border: 0;
 
       &:focus {
         outline-color: rgba(0, 0, 0, 0.2);
@@ -1195,54 +1199,45 @@ input[type=number] {
 
 
  //temp TODO:
-#site-navigation {
-  width: 100%;
-  margin-right: 0;
-}
-#site-header-cart {
-  display: none;
-}
-.storefront-breadcrumb {
-  margin-bottom: 0;
-}
-@media (min-width: 768px) {
-  .storefront-breadcrumb {
-    padding: 5px 0 !important;
-    margin: 0 !important;
-  }
-}
-.entry-header {
-  display: none;
-}
-
-
-.color {
-  &-0,
-  &-7 {
-    background-color: #c76c6c;
-  }
-  &-1,
-  &-8 {
-    background-color: #ce9146;
-  }
-  &-2 ,
-  &-9 {
-    background-color: #edff4b;
-  }
-  &-3,
-  &-10 {
-    background-color: #4a9f13;
-  }
-  &-4,
-  &-11 {
-    background-color: #7fcaff;
-  }
-  &-5,
-  &-12 {
-    background-color: #1e38de;
-  }
-  &-6,
-  &-13 {
-    background-color: #cc1ede;
-  }
-}
+//#site-navigation {
+//  width: 100%;
+//  margin-right: 0;
+//}
+//#site-header-cart {
+//  display: none;
+//}
+//.storefront-breadcrumb {
+//  margin-bottom: 0;
+//}
+//@media (min-width: 768px) {
+//  .storefront-breadcrumb {
+//    padding: 5px 0 !important;
+//    margin: 0 !important;
+//  }
+//}
+//.entry-header {
+//  display: none;
+//}
+//
+//// For Test Repeat Fields
+//.color-0, .color-7 {
+//  background-color: #c76c6c;
+//}
+//.color-1, .color-8 {
+//  background-color: #ce9146;
+//}
+//.color-2, .color-9 {
+//  background-color: #edff4b;
+//}
+//.color-3, .color-10 {
+//  background-color: #4a9f13;
+//}
+//.color-4, .color-11 {
+//  background-color: #7fcaff;
+//}
+//.color-5, .color-12 {
+//  background-color: #1e38de;
+//}
+//.color-6, .color-13 {
+//  background-color: #cc1ede;
+//}
