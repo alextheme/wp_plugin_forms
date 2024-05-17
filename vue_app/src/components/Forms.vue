@@ -426,6 +426,8 @@
                                                    id="input_size_two_ft"
                                                    v-model="field.value.ft"
                                                    @input="validateText(i)"
+                                                   @focus="sizeTwoBlur(i, $event)"
+                                                   @blur="sizeTwoBlur(i, $event)"
                                             >
                                         </div>
                                     </div>
@@ -440,6 +442,8 @@
                                                    id="input_size_two_in"
                                                    v-model="field.value.in"
                                                    @input="validateText(i)"
+                                                   @focus="sizeTwoBlur(i, $event)"
+                                                   @blur="sizeTwoBlur(i, $event)"
                                             >
                                         </div>
                                     </div>
@@ -1113,8 +1117,6 @@ export default {
             const fieldZip = qItem.querySelector('input[name="zip"]')
             const { address, zip } = this.questions[i].value
 
-
-
             if (event.type === 'blur') {
                 this.questions[i].focus = 'blur'
             } else {
@@ -1123,8 +1125,6 @@ export default {
                 fieldZip.classList.remove('valid_error')
             }
 
-            console.log(this.questions[i].complete)
-
             if (this.questions[i].focus === 'blur') {
 
                 if ( ! address ) {
@@ -1132,6 +1132,31 @@ export default {
                 }
                 if ( ! zip ) {
                     fieldZip.classList.add('valid_error')
+                }
+            }
+        },
+        /** Size Two Focus & Blur */
+        sizeTwoBlur(i, event) {
+            const qItem = event.target.closest('.q_item.id'+ i +'.show')
+            const fieldFt = qItem.querySelector('input[name="ft"]')
+            const fieldIn = qItem.querySelector('input[name="in"]')
+            const { ft: valueFt, in: valueIn } = this.questions[i].value
+
+            if (event.type === 'blur') {
+                this.questions[i].focus = 'blur'
+            } else {
+                this.questions[i].focus = 'focus'
+                fieldFt.classList.remove('valid_error')
+                fieldIn.classList.remove('valid_error')
+            }
+
+            if (this.questions[i].focus === 'blur') {
+
+                if ( ! valueFt ) {
+                    fieldFt.classList.add('valid_error')
+                }
+                if ( ! valueIn && valueIn !== 0 ) {
+                    fieldIn.classList.add('valid_error')
                 }
             }
         },
