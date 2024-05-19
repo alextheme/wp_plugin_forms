@@ -14,11 +14,10 @@ class Admin {
     public function add_admin_page() {
 
         //Generate Sunset Admin Page
-        add_menu_page( 'Shppb Forms Options', 'Forms', 'manage_options', 'shppb_forms', [$this, 'forms_create_page'], 'dashicons-text-page', 110 );
+        add_menu_page( 'Forms Options', 'Forms Options', 'manage_options', 'shppb_forms', [$this, 'forms_create_page'], 'dashicons-text-page', 110 );
 
         // Generate Sunset Admin Sub Pages
-        //add_submenu_page( 'shppb_forms', 'Shppb Forms Options', 'Settings', 'manage_options', 'shppb_forms', [$this, 'forms_create_page'] );
-        //add_submenu_page( 'shppb_forms', 'Sunset Forms Options2', 'Options', 'manage_options', 'shppb_forms_settings', [$this, 'forms_settings_page'] );
+        //add_submenu_page( 'shppb_forms', 'Forms Options', 'Settings', 'manage_options', 'shppb_forms', [$this, 'forms_create_page'] );
     }
 
     public function enqueue() {
@@ -26,15 +25,7 @@ class Admin {
         wp_enqueue_style( 'sfi-admin' );
 
         wp_enqueue_script( 'jquery' );
-//        wp_enqueue_script( 'jquery-ui-datepicker' );
-//        wp_enqueue_script( 'jquery-ui-sortable' );
-//        wp_enqueue_script( 'jquery-ui-timepicker', SFI_PLUGIN_URL . 'assets/admin/js/jquery.timePicker.min.js', array( 'jquery' ), SFI_VERSION, true );
-
-        wp_enqueue_script( 'sfi-metaboxes', SFI_PLUGIN_URL . 'assets/admin/js/metaboxes.js', array( 'jquery', 'jquery-ui-timepicker', 'jquery-ui-datepicker' ), SFI_VERSION, true );
-
-//        echo '<pre style="padding:0 0 0 200px;width:100%;min-height:10px;background: #e7e7e7;margin-bottom:5px;">';
-//        print_r(get_current_screen());
-//        echo '</pre>';
+        wp_enqueue_script( 'sfi-metaboxes', SFI_PLUGIN_URL . 'assets/admin/js/metaboxes.js', array( 'jquery' ), SFI_VERSION, true );
     }
 
     public function custom_settings() {

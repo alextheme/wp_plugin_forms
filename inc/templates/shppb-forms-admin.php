@@ -1,4 +1,4 @@
-<h1>Shppb Forms Options</h1>
+<h1>Forms Options</h1>
 <?php settings_errors(); ?>
 
 <form method="post" action="options.php" class="shppb-general-form">

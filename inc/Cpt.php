@@ -13,7 +13,7 @@ class Cpt {
         add_action( 'init', [ $this, 'init_taxonomies'] );
 
         add_filter( 'manage_edit-'.$this->post_type.'_columns', [ $this, 'edit_columns' ] );
-        add_filter( 'manage_edit-'.$this->post_type.'_sortable_columns', [ $this, 'edit_columns' ] );
+        add_filter( 'manage_edit-'.$this->post_type.'_sortable_columns', [ $this, 'edit_columns_sortable' ] );
         add_action( 'manage_' . $this->post_type . '_posts_custom_column', [ $this, 'render_column' ], 10, 2 );
     }
 
@@ -55,7 +55,7 @@ class Cpt {
             ),
             'taxonomies' => array( 'form_type' ),
             'show_in_nav_menus'=> true,
-            'menu_icon' => 'dashicons-list-view',
+            'menu_icon' => 'dashicons-text-page',
             'labels' => array(
                 'name' => $multiple,
                 'singular_name' => $singular,
@@ -74,10 +74,18 @@ class Cpt {
     }
 
     public function edit_columns( $columns ) {
-        //unset( $columns['author'] );
+        $date = $columns['date'];
+        unset( $columns['date'] );
         $columns['form_status'] = 'Status';
         $columns['form_author'] = 'Author Name';
+        $columns['date'] = $date;
         $columns['form_file'] = 'File';
+        return $columns;
+    }
+
+    public function edit_columns_sortable( $columns ) {
+        $columns['form_status'] = 'Status';
+        $columns['form_author'] = 'Author Name';
         return $columns;
     }
 
@@ -85,7 +93,7 @@ class Cpt {
 
         switch ( $colname ) {
             case 'form_status' :
-                echo get_post_meta( $cptid , 'ale_form_status' , true ) === 'on' ? 'Complete' : '<b>During</b>' ;
+                echo get_post_meta( $cptid , 'ale_form_status' , true ) === 'on' ? 'Complete' : '' ;
                 break;
 
             case 'form_author' :
