@@ -12,6 +12,7 @@ class Cpt {
         add_action( 'init', [ $this, 'init_post_type'] );
         add_action( 'init', [ $this, 'init_taxonomies'] );
 
+        // https://make.wordpress.org/docs/plugin-developer-handbook/10-plugin-components/custom-list-table-columns/#what-are-custom-list-table-columns
         add_filter( 'manage_edit-'.$this->post_type.'_columns', [ $this, 'edit_columns' ] );
         add_filter( 'manage_edit-'.$this->post_type.'_sortable_columns', [ $this, 'edit_columns_sortable' ] );
         add_action( 'manage_' . $this->post_type . '_posts_custom_column', [ $this, 'render_column' ], 10, 2 );
