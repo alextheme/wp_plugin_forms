@@ -6,7 +6,7 @@ class Admin {
         //Generate Sunset Admin Page & Sub Pages
         add_action( 'admin_menu', [ $this, 'add_admin_page'] );
         //Activate custom settings
-        add_action( 'admin_init', [$this, 'custom_settings'] );
+        add_action( 'admin_init', [ $this, 'custom_settings'] );
         //Register Styles
         add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
     }
@@ -22,8 +22,19 @@ class Admin {
     }
 
     public function enqueue() {
-        wp_register_style( 'shppb-admin', SFI_PLUGIN_URL . 'assets/admin/css/styles.css' );
-        wp_enqueue_style( 'shppb-admin' );
+        wp_register_style( 'sfi-admin', SFI_PLUGIN_URL . 'assets/admin/css/styles.css' );
+        wp_enqueue_style( 'sfi-admin' );
+
+        wp_enqueue_script( 'jquery' );
+//        wp_enqueue_script( 'jquery-ui-datepicker' );
+//        wp_enqueue_script( 'jquery-ui-sortable' );
+//        wp_enqueue_script( 'jquery-ui-timepicker', SFI_PLUGIN_URL . 'assets/admin/js/jquery.timePicker.min.js', array( 'jquery' ), SFI_VERSION, true );
+
+        wp_enqueue_script( 'sfi-metaboxes', SFI_PLUGIN_URL . 'assets/admin/js/metaboxes.js', array( 'jquery', 'jquery-ui-timepicker', 'jquery-ui-datepicker' ), SFI_VERSION, true );
+
+//        echo '<pre style="padding:0 0 0 200px;width:100%;min-height:10px;background: #e7e7e7;margin-bottom:5px;">';
+//        print_r(get_current_screen());
+//        echo '</pre>';
     }
 
     public function custom_settings() {

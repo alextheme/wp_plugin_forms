@@ -12,7 +12,9 @@ namespace SFI\Inc;
  */
 
 require_once 'Pdf.php';
+require_once 'Cpt.php';
 use SFI\Inc\Pdf;
+use SFI\Inc\Cpt;
 
 class Shortcode {
 

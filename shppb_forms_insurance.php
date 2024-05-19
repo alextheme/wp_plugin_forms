@@ -19,9 +19,11 @@ require_once 'vendor/autoload.php';
 
 require_once 'inc/Shortcode.php';
 require_once 'inc/Admin.php';
+require_once 'inc/Cpt.php';
 
 use SFI\Inc\Shortcode;
 use SFI\Inc\Admin;
+use SFI\Inc\Cpt;
 
 final class Shppb_Forms_Insurance {
     const VERSION = '1.0.2';
@@ -61,6 +63,7 @@ final class Shppb_Forms_Insurance {
         // init
         new Shortcode();
         new Admin();
+        new Cpt();
     }
 }
 
