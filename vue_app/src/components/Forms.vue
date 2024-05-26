@@ -1627,44 +1627,46 @@ export default {
 
             if (cookies.isSendMail === 'send') {
                 console.log('No send. Timeout 3 min')
-                // return
+                return
             }
 
             // Create Html Content for PDF File
             let content = '<div>'
-            content += `<h1>${this.userName.full_name} ${this.userName.last_name}</h1>`
-            content += `<br>`
-            content += `<span>${this.form}</span>`
-            content += `<br>`
+            content += `<h1>${this.userName.full_name} ${this.userName.last_name}</h1><br>`
+            content += `<span>${this.form}</span><br>`
+
             this.questions.forEach(qsn => {
                 const title = this.form === 'car' ? qsn.title.replace('%%car_makes%%', 'this.carMakes') : qsn.title
+
                 let value = ''
-                switch (qsn.type) {
-                    case 'select_auto':
-                        value = `${qsn.value.auto_year}, ${qsn.value.auto_make}, ${qsn.value.auto_model}`
-                        break
-                    case 'date':
-                        value = `${qsn.value.dd}-${qsn.value.mm}-${qsn.value.yyyy}`
-                        break
-                    case 'user_name':
-                        value = `${qsn.value.full_name} ${qsn.value.last_name}`
-                        break
-                    case 'address':
-                        value = `${qsn.value.address}, ${qsn.value.apt}, ${qsn.value.state}, ${qsn.value.unit}, ${qsn.value.zip}`
-                        break
-                    case 'address_v2':
-                        value = `${qsn.value.address}, ${qsn.value.city}, ${qsn.value.state}, ${qsn.value.unit}, ${qsn.value.zip}`
-                        break
-                    case 'size_two':
-                        value = `ft: ${qsn.value.ft}, in: ${qsn.value.in}`
-                        break
-                    default: value = qsn.value
+
+                const getValueArray = value => Object.keys(value).map(key => value[key]).filter(val => val !== '')
+
+                if (Object.keys(qsn.value).map(key => key !== 'error' ? qsn.value[key] : '').join('').replaceAll('-', '')) {
+
+                    switch (qsn.type) {
+                        case 'select_auto':
+                        case 'address':
+                        case 'address_v2':
+                            value = getValueArray(qsn.value).join(', ')
+                            break
+                        case 'date':
+                            value = getValueArray(qsn.value).join('-')
+                            break
+                        case 'user_name':
+                            value = getValueArray(qsn.value).join(' ')
+                            break
+                        case 'size_two':
+                            value = `ft: ${qsn.value.ft}, in: ${qsn.value.in}`
+                            break
+                        default:
+                            value = qsn.value
+                    }
+
+                    content += `<div><h4>${title}</h4><p>${value}</p></div>`
                 }
-                content += `<div><h4>${title}</h4><p>${value}</p></div>`
             })
             content += '</div>'
-
-            console.log(content)
 
             jQuery.ajax({
                 url: sfi_params.adminUri,
