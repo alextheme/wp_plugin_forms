@@ -1640,7 +1640,7 @@ export default {
 
                 let value = ''
 
-                const getValueArray = value => Object.keys(value).map(key => value[key]).filter(val => val !== '')
+                const getValueArray = value => Object.keys(value).filter(key => key !== 'error').map(key => value[key]).filter(val => val !== '')
 
                 if (Object.keys(qsn.value).map(key => key !== 'error' ? qsn.value[key] : '').join('').replaceAll('-', '')) {
 
