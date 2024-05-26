@@ -52,9 +52,9 @@ class Admin {
         add_settings_field( 'shppb-mail-from-email',     'From Email',       [$this, 'mail_from_email'],     'shppb_forms', 'shppb-forms-options');
         add_settings_field( 'shppb-mail-from-name',      'From Name',        [$this, 'mail_from_name'],      'shppb_forms', 'shppb-forms-options');
         add_settings_field( 'shppb-mail-recipient-email','Recipient Email',  [$this, 'mail_recipient_email'],'shppb_forms', 'shppb-forms-options');
-        add_settings_field( 'shppb-mail-recipient-name', 'Recipient Email',  [$this, 'mail_recipient_name'], 'shppb_forms', 'shppb-forms-options');
+        add_settings_field( 'shppb-mail-recipient-name', 'Recipient Name',   [$this, 'mail_recipient_name'], 'shppb_forms', 'shppb-forms-options');
         add_settings_field( 'shppb-mail-subject',        'Mail Subject',     [$this, 'mail_subject'],        'shppb_forms', 'shppb-forms-options');
-        add_settings_field( 'shppb-mail-body',           'Mail Body',        [$this, 'mail_body'],            'shppb_forms', 'shppb-forms-options');
+        add_settings_field( 'shppb-mail-body',           'Mail Body',        [$this, 'mail_body'],           'shppb_forms', 'shppb-forms-options');
     }
 
     // Sidebar Options Functions
@@ -64,37 +64,37 @@ class Admin {
 
     /** Fields */
     public function mail_host() {
-        echo '<input type="text" name="mail_host" value="'.esc_attr(get_option( 'mail_host' )).'" placeholder="host" />';
+        echo '<input type="text" name="mail_host" value="'.esc_attr(get_option( 'mail_host' )).'" placeholder="Host" />';
     }
     public function mail_user_name() {
-        echo '<input type="text" name="mail_user_name" value="'.esc_attr(get_option( 'mail_user_name' )).'" placeholder="user name" />';
+        echo '<input type="text" name="mail_user_name" value="'.esc_attr(get_option( 'mail_user_name' )).'" placeholder="User Name" />';
     }
     public function mail_password() {
-        echo '<input type="text" name="mail_password" value="'.esc_attr(get_option( 'mail_password' )).'" placeholder="mail password" />';
+        echo '<input type="password" name="mail_password" value="'.esc_attr(get_option( 'mail_password' )).'" placeholder="Mail Password" />';
     }
     public function mail_port() {
         echo '<input type="text" name="mail_port" value="'.esc_attr(get_option( 'mail_port' )).'" placeholder="465 or 587" />';
     }
     public function mail_smtp_secure() {
-        echo '<input type="text" name="mail_smtp_secure" value="'.esc_attr(get_option( 'mail_smtp_secure' )).'" placeholder="smtp secure (ssl)" />';
+        echo '<input type="text" name="mail_smtp_secure" value="'.esc_attr(get_option( 'mail_smtp_secure' )).'" placeholder="Smtp secure (ssl)" />';
     }
     public function mail_from_email() {
-        echo '<input type="text" name="from_email" value="'.esc_attr(get_option( 'from_email' )).'" placeholder="from email" />';
+        echo '<input type="text" name="from_email" value="'.esc_attr(get_option( 'from_email' )).'" placeholder="From email" />';
     }
     public function mail_from_name() {
-        echo '<input type="text" name="from_name" value="'.esc_attr(get_option( 'from_name' )).'" placeholder="from name" />';
+        echo '<input type="text" name="from_name" value="'.esc_attr(get_option( 'from_name' )).'" placeholder="From name" />';
     }
     public function mail_recipient_email() {
-        echo '<input type="text" name="recipient_email" value="'.esc_attr(get_option( 'recipient_email' )).'" placeholder="recipient email" />';
+        echo '<textarea name="recipient_email" placeholder="Recipient emails. Please enter each address on a new line" style="min-height:100px;height:100px">'.esc_attr( get_option( 'recipient_email' ) ).'</textarea>';
     }
     public function mail_recipient_name() {
-        echo '<input type="text" name="recipient_name" value="'.esc_attr(get_option( 'recipient_name' )).'" placeholder="recipient name" />';
+        echo '<textarea name="recipient_name" placeholder="Recipient Names. Please enter each Name on a new line" style="min-height:100px;height:100px">'.esc_attr( get_option( 'recipient_name' ) ).'</textarea>';
     }
     public function mail_subject() {
-        echo '<input type="text" name="mail_subject" value="'.esc_attr(get_option( 'mail_subject' )).'" placeholder="mail subject" />';
+        echo '<input type="text" name="mail_subject" value="'.esc_attr(get_option( 'mail_subject' )).'" placeholder="Mail subject" />';
     }
     public function mail_body() {
-        echo '<textarea name="mail_body" placeholder="mail body">'.esc_attr(get_option( 'mail_body' )).'</textarea>';
+        echo '<textarea name="mail_body" placeholder="Mail body" style="min-height:100px;height:100px">'.esc_attr(get_option( 'mail_body' )).'</textarea>';
     }
     // Fields
 

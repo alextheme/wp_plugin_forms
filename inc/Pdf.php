@@ -184,6 +184,27 @@ class Pdf {
     }
 
     private function send_mail() {
+        $recipient_emails = array_map('trim', explode("\n", get_option( 'recipient_email' )));
+        $recipient_names = array_map('trim', explode("\n", get_option( 'recipient_name' )));
+
+        foreach ( $recipient_emails as $inx => $recipient_email ) {
+            $mail = $this->create_mail( $recipient_email, $recipient_names[ $inx ] ?? "" );
+
+            //receiver address and name
+            $mail->addAddress( $recipient_email, $recipient_names[ $inx ] ?? '' );
+
+            // Send mail
+            if (!$mail->send()) {
+                echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
+            } else {
+                echo 'Message has been sent.';
+            }
+
+            $mail->smtpClose();
+        }
+    }
+
+    private function create_mail( $email, $name ) {
         // https://mailtrap.io/blog/phpmailer-gmail/
         $mail = new PHPMailer();
         $mail->IsSMTP(); // enable SMTP
@@ -198,36 +219,18 @@ class Pdf {
         $mail->SMTPSecure   = get_option( 'mail_smtp_secure' ); //ssl - secure transfer enabled REQUIRED for Gmail
 
         $from_email_address = get_option( 'from_email' );
-        $recipient_email_address = get_option( 'recipient_email' );
         $from_name          = get_option( 'from_name' );
-        $recipient_name     = get_option( 'recipient_name' );
 
         //sender information
         $mail->setFrom($from_email_address, $from_name);
 
-        //receiver address and name
-        $mail->addAddress($recipient_email_address, $recipient_name);
-
-
-        // Add cc or bcc
-        // $mail->addCC('email@mail.com');
-        // $mail->addBCC('user@mail.com');
-
-        $mail->addAttachment($this->pdf_file_path);
-
+        $mail->addAttachment( wp_upload_dir()['basedir'] . $this->pdf_file_path );
 
         $mail->isHTML(true);
 
         $mail->Subject      = get_option( 'mail_subject' );
         $mail->Body         = get_option( 'mail_body' );
 
-        // Send mail
-        if (!$mail->send()) {
-            echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent.';
-        }
-
-        $mail->smtpClose();
+        return $mail;
     }
 }
